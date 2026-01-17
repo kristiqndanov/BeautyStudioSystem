@@ -22,7 +22,9 @@ namespace BeautyStudioSystem
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
+            builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
+            builder.Services.AddScoped<IReservationsRepository, ReservationsRepository>();
 
             var app = builder.Build();
 
