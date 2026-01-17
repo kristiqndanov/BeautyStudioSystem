@@ -1,5 +1,7 @@
 using BeautyStudioSystem.Data;
 using BeautyStudioSystem.Infrastructure.Repository;
+using BeautyStudioSystem.Services;
+using BeautyStudioSystem.Services.Contracts;
 using BeautyStudioSystem.Infrastructure.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,8 @@ namespace BeautyStudioSystem
             builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
             builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
             builder.Services.AddScoped<IReservationsRepository, ReservationsRepository>();
+
+            builder.Services.AddScoped<IClientsService, ClientsService>();
 
             var app = builder.Build();
 
