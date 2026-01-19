@@ -29,6 +29,7 @@ namespace BeautyStudioSystem
             builder.Services.AddScoped<IReservationsRepository, ReservationsRepository>();
 
             builder.Services.AddScoped<IClientsService, ClientsService>();
+            builder.Services.AddScoped<IServicesService, ServicesService>();
 
             var app = builder.Build();
 

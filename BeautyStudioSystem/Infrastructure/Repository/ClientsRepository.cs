@@ -28,7 +28,11 @@ namespace BeautyStudioSystem.Infrastructure.Repository
 
         public async Task<IEnumerable<Client>> GetAllClientsAsync()
         {
-            return await _dbContext.Clients.ToListAsync();
+            return await _dbContext.Clients
+            .OrderBy(c => c.FirstName)
+            .ThenBy(c => c.LastName)
+            .ThenBy(c => c.Email)
+            .ToListAsync();
         }
 
         public async Task<Client> GetClientByEmailAsync(string email)
@@ -38,7 +42,7 @@ namespace BeautyStudioSystem.Infrastructure.Repository
 
         public async Task<Client> GetClientByIdAsync(int id)
         {
-            return await _dbContext.Clients.SingleOrDefaultAsync(c => c.Id == id);
+            return await _dbContext.Clients.Include(c => c.Reservations).SingleOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Client> GetClientByNameAsync(string name)

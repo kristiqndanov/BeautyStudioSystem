@@ -24,6 +24,7 @@ namespace BeautyStudioSystem.Services
                 Id = c.Id,
                 FullName = $"{c.FirstName} {c.LastName}",
                 Phone = c.Phone,
+                Email = c.Email,
                 Reservations = c.Reservations
             })
             .ToList();

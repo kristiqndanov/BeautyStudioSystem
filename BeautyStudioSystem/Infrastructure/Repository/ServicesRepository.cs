@@ -13,6 +13,13 @@ namespace BeautyStudioSystem.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
+
+        public async Task AddService(Service service)
+        {
+            await _dbContext.Services.AddAsync(service);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async void DeleteService(Service service)
         {
             _dbContext.Services.Remove(service);
