@@ -30,6 +30,7 @@ namespace BeautyStudioSystem
 
             builder.Services.AddScoped<IClientsService, ClientsService>();
             builder.Services.AddScoped<IServicesService, ServicesService>();
+            builder.Services.AddScoped<IReservationsService, ReservationsService>();
 
             var app = builder.Build();
 
