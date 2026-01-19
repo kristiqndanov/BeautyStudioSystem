@@ -35,9 +35,9 @@
                                 <td>@client.Email</td>
                                 <td>@client.Phone</td>
                                 <td>
-                                        <a asp-controller="Reservations"
-                                        asp-action="ByClient"
-                                        asp-route-clientId="@client.Id"
+                                        <a asp-controller="Clients"
+                                                asp-action="ClientReservations"
+                                        asp-route-id="@client.Id"
                                         class="text-decoration-none">See reservations</a>
                                 </td>
                                 <td class="text-end">

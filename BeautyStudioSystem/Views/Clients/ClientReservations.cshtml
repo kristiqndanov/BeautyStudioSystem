@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ReservationViewModel>
+
+@{
+    ViewData["Title"] = "Client's Reservations";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">@ViewBag.ClientName's Reservations</h1>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Full Name</th>
+                <th scope="col">Service</th>
+                <th scope="col">Date</th>
+                <th scope="col">Start Time</th>
+                <th scope="col" class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                        <tr>
+                            <td colspan="5" class="text-center py-4">No reservations found.</td>
+                        </tr>
+            }
+            else
+            {
+                foreach (var reservation in Model)
+                {
+                                    <tr>
+                                        <td>@reservation.ClientName</td>
+                                        <td>@reservation.ServiceName</td>
+                                        <td>@reservation.Date</td>
+                                        <td>@reservation.StartTime</td>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group" aria-label="Actions">
+                                                <form asp-action="Delete" asp-route-id="@reservation.Id" method="post" class="d-inline ms-1" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

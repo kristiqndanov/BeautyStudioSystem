@@ -1,4 +1,5 @@
-﻿using BeautyStudioSystem.Infrastructure.Contracts;
+﻿using BeautyStudioSystem.Data.Models;
+using BeautyStudioSystem.Infrastructure.Contracts;
 using BeautyStudioSystem.Infrastructure.Repository;
 using BeautyStudioSystem.Services.Contracts;
 using BeautyStudioSystem.ViewModels;
@@ -19,6 +20,18 @@ namespace BeautyStudioSystem.Controllers
         {
             var clientsViewModels = await _clientsService.GetAllClientsAsync();
             return View(clientsViewModels);
+        }
+
+        public async Task<IActionResult> ClientReservations(int id)
+        {
+            
+
+            var reservationViewModels = await _clientsService.GetClientReservations(id);
+            var clientName = reservationViewModels.Select(rvm => rvm.ClientName).FirstOrDefault().ToString();
+            ViewBag.ClientName = $"{clientName}";
+
+
+            return View(reservationViewModels);
         }
     }
 }
