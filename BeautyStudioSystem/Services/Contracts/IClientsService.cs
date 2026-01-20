@@ -10,6 +10,12 @@ namespace BeautyStudioSystem.Services.Contracts
 
         public Task<IEnumerable<ClientViewModel>> SearchClientsAsync(string search);
 
-        public Task DeleteClienAsync(int id);
+        public Task DeleteClientAsync(int id);
+
+        public Task UpdateClientAsync(ClientViewModel clientViewModel);
+
+        public Task<ClientViewModel> GetClientByIdAsync(int id);
+
+        public void ValidateClient(ClientViewModel clientViewModel);
     }
 }

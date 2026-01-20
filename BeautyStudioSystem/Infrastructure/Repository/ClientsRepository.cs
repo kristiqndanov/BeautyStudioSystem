@@ -74,17 +74,14 @@ namespace BeautyStudioSystem.Infrastructure.Repository
             
         }
 
-        public async Task UpdateClient(int id)
+        public async Task UpdateClient(Client client)
         {
-            var client = await _dbContext.Clients.FindAsync(id);
-
-            if (client == null)
+            if (client != null)
             {
-                return;
+                _dbContext.Clients.Update(client);
+                await _dbContext.SaveChangesAsync();
             }
-
-            _dbContext.Clients.Update(client);
-            await _dbContext.SaveChangesAsync();
+            
         }
     }
 }

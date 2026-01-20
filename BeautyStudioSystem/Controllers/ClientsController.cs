@@ -4,6 +4,7 @@ using BeautyStudioSystem.Infrastructure.Repository;
 using BeautyStudioSystem.Services.Contracts;
 using BeautyStudioSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace BeautyStudioSystem.Controllers
@@ -55,11 +56,41 @@ namespace BeautyStudioSystem.Controllers
 
         public async Task<IActionResult> DeleteClient(int id)
         {
-            await _clientsService.DeleteClienAsync(id);
+            await _clientsService.DeleteClientAsync(id);
 
             TempData["Message"] = "Client deleted successfully.";
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateClient(int id)
+        {
+            var client = await _clientsService.GetClientByIdAsync(id);
+
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            return View(client);
+        }
+
+        public async Task<IActionResult> UpdateClient(ClientViewModel clientViewModel)
+        {
+            try
+            {
+                _clientsService.ValidateClient(clientViewModel);
+                await _clientsService.UpdateClientAsync(clientViewModel);
+
+                TempData["Message"] = "Client updated successfully.";
+                return RedirectToAction("Index");
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(clientViewModel);
+            }
         }
     }
 }

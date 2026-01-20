@@ -12,7 +12,7 @@ namespace BeautyStudioSystem.Infrastructure.Contracts
         public Task<Client> GetClientByEmailAsync(string email);
         public Task AddClientAsync(Client client);
 
-        public Task UpdateClient(int id);
+        public Task UpdateClient(Client client);
 
         public Task DeleteClient(int id);
 

@@ -4,6 +4,7 @@ using BeautyStudioSystem.ViewModels;
 using BeautyStudioSystem.Services.Contracts;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeautyStudioSystem.Services
 
@@ -17,7 +18,7 @@ namespace BeautyStudioSystem.Services
             _repo = repo;
         }
 
-        public async Task DeleteClienAsync(int id)
+        public async Task DeleteClientAsync(int id)
         {
             var client = await _repo.GetClientByIdAsync(id);
 
@@ -39,6 +40,26 @@ namespace BeautyStudioSystem.Services
                 Email = c.Email
             })
             .ToList();
+        }
+
+        public async Task<ClientViewModel> GetClientByIdAsync(int id)
+        {
+            var client = await _repo.GetClientByIdAsync(id);
+
+            if (client == null)
+            {
+                return null;
+            }
+
+            var clientViewModel = new ClientViewModel
+            {
+                Id = client.Id,
+                FullName = $"{client.FirstName} {client.LastName}",
+                Phone = client.Phone,
+                Email = client.Email
+            };
+
+            return clientViewModel;
         }
 
         public async Task<IEnumerable<ReservationViewModel>> GetClientReservations(int id)
@@ -105,6 +126,53 @@ namespace BeautyStudioSystem.Services
 
                 }
 
+            }
+        }
+
+        public async Task UpdateClientAsync(ClientViewModel clientViewModel)
+        {
+            var client = await _repo.GetClientByIdAsync(clientViewModel.Id);
+
+            if (client != null)
+            {
+                var names = clientViewModel.FullName.Split(' ', 2);
+
+                client.FirstName = names[0];
+                client.LastName = names.Length > 1 ? names[1] : string.Empty;
+                client.Phone = clientViewModel.Phone;
+                client.Email = clientViewModel.Email;
+
+                await _repo.UpdateClient(client);
+            }
+        }
+
+        public void ValidateClient(ClientViewModel clientViewModel)
+        {
+            var errors = new List<string>();
+
+            
+            if (string.IsNullOrWhiteSpace(clientViewModel.FullName) || clientViewModel.FullName.Trim().Split(' ').Length != 2)
+            {
+                errors.Add("Full name should be two words and cannot be empty.");
+            }
+
+           
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (string.IsNullOrWhiteSpace(clientViewModel.Email) || !emailRegex.IsMatch(clientViewModel.Email))
+            {
+                errors.Add("That is not a valid email.");
+            }
+
+            
+            var phoneRegex = new Regex(@"^\d{10}$");
+            if (string.IsNullOrWhiteSpace(clientViewModel.Phone) || !phoneRegex.IsMatch(clientViewModel.Phone))
+            {
+                errors.Add("Phone number must be 10 digits");
+            }
+
+            if (errors.Any())
+            {
+                throw new ValidationException(string.Join(" ", errors));
             }
         }
     }
