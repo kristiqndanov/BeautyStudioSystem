@@ -4,9 +4,30 @@
     ViewData["Title"] = "Clients";
 }
 
+@if (ViewBag.Message != null)
+{
+        <p class="text-danger">@ViewBag.Message</p>
+}
+
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3">Clients</h1>
 </div>
+
+<form asp-action="Index" method="post" class="mb-3">
+    <div class="input-group">
+        <input type="text"
+               name="search"
+               value="@Context.Request.Query["search"]"
+               class="form-control"
+               placeholder="Search clients by name or email" />
+
+        <button class="btn btn-primary" type="submit">
+            Search
+        </button>
+    </div>
+</form>
+
 
 <div class="table-responsive">
     <table class="table table-striped table-hover align-middle">
