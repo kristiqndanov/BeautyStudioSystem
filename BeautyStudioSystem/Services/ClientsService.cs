@@ -17,6 +17,16 @@ namespace BeautyStudioSystem.Services
             _repo = repo;
         }
 
+        public async Task DeleteClienAsync(int id)
+        {
+            var client = await _repo.GetClientByIdAsync(id);
+
+            if (client != null)
+            {
+                await _repo.DeleteClient(id);
+            }
+        }
+
         public async Task<IEnumerable<ClientViewModel>> GetAllClientsAsync()
         {
             var clients = await _repo.GetAllClientsAsync();

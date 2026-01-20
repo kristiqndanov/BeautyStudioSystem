@@ -52,5 +52,14 @@ namespace BeautyStudioSystem.Controllers
 
             return View(reservationViewModels);
         }
+
+        public async Task<IActionResult> DeleteClient(int id)
+        {
+            await _clientsService.DeleteClienAsync(id);
+
+            TempData["Message"] = "Client deleted successfully.";
+
+            return RedirectToAction("Index");
+        }
     }
 }

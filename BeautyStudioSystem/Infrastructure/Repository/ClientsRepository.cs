@@ -20,8 +20,15 @@ namespace BeautyStudioSystem.Infrastructure.Repository
            await _dbContext.SaveChangesAsync();
         }
 
-        public async void DeleteClient(Client client)
+        public async Task DeleteClient(int id)
         {
+            var client = await _dbContext.Clients.FindAsync(id);
+
+            if (client == null)
+            {
+                return;
+            }   
+
             _dbContext.Clients.Remove(client);
             await _dbContext.SaveChangesAsync();
         }
@@ -67,8 +74,15 @@ namespace BeautyStudioSystem.Infrastructure.Repository
             
         }
 
-        public async void UpdateClient(Client client)
+        public async Task UpdateClient(int id)
         {
+            var client = await _dbContext.Clients.FindAsync(id);
+
+            if (client == null)
+            {
+                return;
+            }
+
             _dbContext.Clients.Update(client);
             await _dbContext.SaveChangesAsync();
         }
