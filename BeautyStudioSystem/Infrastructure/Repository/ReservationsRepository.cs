@@ -19,7 +19,7 @@ namespace BeautyStudioSystem.Infrastructure.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async void DeleteReservation(Reservation reservation)
+        public async Task DeleteReservation(Reservation reservation)
         {
             _dbContext.Reservations.Remove(reservation);
             await _dbContext.SaveChangesAsync();
@@ -42,10 +42,13 @@ namespace BeautyStudioSystem.Infrastructure.Repository
 
         public async Task<Reservation> GetByIdAsync(int id)
         {
-           return await _dbContext.Reservations.SingleOrDefaultAsync(r => r.Id == id);
+           return await _dbContext.Reservations
+                .Include(r => r.Client)
+                .Include(r => r.Service)
+                .SingleOrDefaultAsync(r => r.Id == id);
         }
 
-        public async void UpdateReservation(Reservation reservation)
+        public async Task UpdateReservation(Reservation reservation)
         {
             _dbContext.Reservations.Update(reservation);
             await _dbContext.SaveChangesAsync();

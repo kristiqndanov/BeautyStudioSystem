@@ -13,6 +13,17 @@ namespace BeautyStudioSystem.Services
             _reservationsRepository = reservationsRepository;
         }
 
+        public async Task DeleteReservation(int id)
+        {
+            var reservation = await _reservationsRepository.GetByIdAsync(id);
+
+            if (reservation == null)
+            {
+                throw new ArgumentException("Reservation not found.");
+            }
+
+            await _reservationsRepository.DeleteReservation(reservation);
+        }
 
         public async Task<IEnumerable<ReservationViewModel>> GetAllReservationsAsync()
         {
@@ -37,5 +48,21 @@ namespace BeautyStudioSystem.Services
             return reservationViewModels;
         }
 
+        public async Task<ReservationViewModel> GetReservationAsync(int id)
+        {
+            var reservation = await _reservationsRepository.GetByIdAsync(id);
+
+            var reservationViewModel = new ReservationViewModel
+            {
+                Id = reservation.Id,
+                Date = reservation.Date.ToShortDateString(),
+                ClientName = $"{reservation.Client.FirstName} {reservation.Client.LastName}",
+                ServiceName = $"{reservation.Service.Name}",
+                ClientId = reservation.ClientId,
+                StartTime = reservation.StartTime.ToShortTimeString()
+            };
+
+            return reservationViewModel;
+        }
     }
 }

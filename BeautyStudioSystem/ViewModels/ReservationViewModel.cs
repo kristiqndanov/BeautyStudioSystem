@@ -12,6 +12,9 @@ namespace BeautyStudioSystem.ViewModels
         public string ClientName { get; set; } = null!;
 
         [Required]
+        public int ClientId { get; set; }
+
+        [Required]
         public string ServiceName { get; set; } = null!;
 
         [Required]

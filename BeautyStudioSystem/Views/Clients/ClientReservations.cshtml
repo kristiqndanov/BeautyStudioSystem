@@ -37,7 +37,7 @@
                                         <td>@reservation.StartTime</td>
                                         <td class="text-end">
                                             <div class="btn-group" role="group" aria-label="Actions">
-                                                <form asp-action="Delete" asp-route-id="@reservation.Id" method="post" class="d-inline ms-1" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                                                <form asp-controller="Reservations" asp-action="DeleteReservation" asp-route-id="@reservation.Id" method="post" class="d-inline ms-1" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
                                                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                                 </form>
                                             </div>

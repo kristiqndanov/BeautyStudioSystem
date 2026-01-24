@@ -146,34 +146,5 @@ namespace BeautyStudioSystem.Services
             }
         }
 
-        public void ValidateClient(ClientViewModel clientViewModel)
-        {
-            var errors = new List<string>();
-
-            
-            if (string.IsNullOrWhiteSpace(clientViewModel.FullName) || clientViewModel.FullName.Trim().Split(' ').Length != 2)
-            {
-                errors.Add("Full name should be two words and cannot be empty.");
-            }
-
-           
-            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-            if (string.IsNullOrWhiteSpace(clientViewModel.Email) || !emailRegex.IsMatch(clientViewModel.Email))
-            {
-                errors.Add("That is not a valid email.");
-            }
-
-            
-            var phoneRegex = new Regex(@"^\d{10}$");
-            if (string.IsNullOrWhiteSpace(clientViewModel.Phone) || !phoneRegex.IsMatch(clientViewModel.Phone))
-            {
-                errors.Add("Phone number must be 10 digits");
-            }
-
-            if (errors.Any())
-            {
-                throw new ValidationException(string.Join(" ", errors));
-            }
-        }
     }
 }

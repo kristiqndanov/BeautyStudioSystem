@@ -18,5 +18,26 @@ namespace BeautyStudioSystem.Controllers
 
             return View(reservationsViewModels);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteReservation(int id)
+        {
+
+            var reservation = await _reservationsService.GetReservationAsync(id);
+
+            if (reservation == null)
+                return NotFound();
+
+            await _reservationsService.DeleteReservation(id);
+
+            TempData["Message"] = "Reservation deleted successfully.";
+
+            return RedirectToAction(
+                "ClientReservations",   
+                "Clients",             
+                new { id = reservation.ClientId }
+            );
+        }
+
     }
 }

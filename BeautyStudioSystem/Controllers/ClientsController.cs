@@ -47,8 +47,15 @@ namespace BeautyStudioSystem.Controllers
                 ViewBag.Message = "Client doesn't have any reservations.";
             }
 
-            var clientName = reservationViewModels.Select(rvm => rvm.ClientName).FirstOrDefault().ToString();
-            ViewBag.ClientName = $"{clientName}";
+
+            if (reservationViewModels.Any())
+            {
+                ViewBag.ClientName = reservationViewModels.First().ClientName;
+            }
+            else
+            {
+                ViewBag.ClientName = "Client";
+            }
 
 
             return View(reservationViewModels);
@@ -76,21 +83,17 @@ namespace BeautyStudioSystem.Controllers
             return View(client);
         }
 
+        [HttpPost]
         public async Task<IActionResult> UpdateClient(ClientViewModel clientViewModel)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                _clientsService.ValidateClient(clientViewModel);
-                await _clientsService.UpdateClientAsync(clientViewModel);
-
-                TempData["Message"] = "Client updated successfully.";
-                return RedirectToAction("Index");
-            }
-            catch (ValidationException ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
                 return View(clientViewModel);
             }
+
+            await _clientsService.UpdateClientAsync(clientViewModel);
+            TempData["Message"] = "Client updated successfully.";
+            return RedirectToAction("Index");
         }
     }
 }

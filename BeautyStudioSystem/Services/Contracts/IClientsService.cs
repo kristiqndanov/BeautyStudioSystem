@@ -16,6 +16,5 @@ namespace BeautyStudioSystem.Services.Contracts
 
         public Task<ClientViewModel> GetClientByIdAsync(int id);
 
-        public void ValidateClient(ClientViewModel clientViewModel);
     }
 }
