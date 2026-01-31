@@ -34,5 +34,20 @@ namespace BeautyStudioSystem.Services
 
             return serviceViewModels;
         }
+
+        public async Task<ServiceViewModel> GetServiceAsync(int id)
+        {
+           var service = await _servicesRepo.GetByIdAsync(id);
+
+            var serviceViewModel = new ServiceViewModel
+            {
+                Id = service.Id,
+                Name = service.Name,
+                Price = service.Price,
+                Reservations = service.Reservations
+            };
+
+            return serviceViewModel;
+        }
     }      
 }

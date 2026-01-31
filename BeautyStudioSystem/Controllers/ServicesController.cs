@@ -18,5 +18,12 @@ namespace BeautyStudioSystem.Controllers
 
             return View(servicesViewModels);
         }
+
+        public async Task<IActionResult> ServiceDetails(int id)
+        {
+            var serviceViewModel = await _servicesService.GetServiceAsync(id);
+
+            return View(serviceViewModel);
+        }
     }
 }
