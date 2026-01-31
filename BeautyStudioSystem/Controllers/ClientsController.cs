@@ -63,9 +63,16 @@ namespace BeautyStudioSystem.Controllers
 
         public async Task<IActionResult> DeleteClient(int id)
         {
-            await _clientsService.DeleteClientAsync(id);
+            var clientViewModel = await _clientsService.GetClientByIdAsync(id);
 
-            TempData["Message"] = "Client deleted successfully.";
+           if (clientViewModel != null)
+            {
+                await _clientsService.DeleteClientAsync(id);
+
+                TempData["Message"] = "Client deleted successfully.";
+            }
+
+           
 
             return RedirectToAction("Index");
         }

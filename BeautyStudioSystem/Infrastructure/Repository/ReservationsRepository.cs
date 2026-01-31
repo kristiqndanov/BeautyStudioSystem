@@ -48,6 +48,11 @@ namespace BeautyStudioSystem.Infrastructure.Repository
                 .SingleOrDefaultAsync(r => r.Id == id);
         }
 
+        public async Task<bool> ReservationExistsAsync(int serviceId, DateTime date)
+        {
+            return await _dbContext.Reservations.AnyAsync(r => r.ServiceId == serviceId && r.Date == date);
+        }
+
         public async Task UpdateReservation(Reservation reservation)
         {
             _dbContext.Reservations.Update(reservation);

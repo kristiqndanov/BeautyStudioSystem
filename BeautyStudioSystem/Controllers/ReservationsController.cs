@@ -1,15 +1,20 @@
-﻿using BeautyStudioSystem.Services.Contracts;
+﻿using BeautyStudioSystem.Data.Models;
+using BeautyStudioSystem.Services.Contracts;
+using BeautyStudioSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BeautyStudioSystem.Controllers
 {
     public class ReservationsController : Controller
     {
         private readonly IReservationsService _reservationsService;
+        private readonly IServicesService _servicesService;
 
-        public ReservationsController(IReservationsService reservationsService)
+        public ReservationsController(IReservationsService reservationsService, IServicesService servicesService)
         {
             _reservationsService = reservationsService;
+            _servicesService = servicesService;
         }
 
         public async Task<IActionResult> Index()
@@ -26,7 +31,10 @@ namespace BeautyStudioSystem.Controllers
             var reservation = await _reservationsService.GetReservationAsync(id);
 
             if (reservation == null)
+            {
                 return NotFound();
+            }
+                
 
             await _reservationsService.DeleteReservation(id);
 
@@ -37,6 +45,60 @@ namespace BeautyStudioSystem.Controllers
                 "Clients",             
                 new { id = reservation.ClientId }
             );
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> CreateReservation()
+        {
+            var services = await _servicesService.GetAllServicesAsync();
+
+            ViewBag.Services = services
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Name
+                })
+                .ToList();
+
+            return View();
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> CreateReservation(CreateReservationFormModel reservationViewModel)
+        {
+            var services = await _servicesService.GetAllServicesAsync();
+
+            ViewBag.Services = services
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Name
+                })
+                .ToList();
+
+            if (!ModelState.IsValid)
+            {
+
+                return View(reservationViewModel);
+            }
+
+            try
+            {
+                await _reservationsService.AddReservationAsync(reservationViewModel);
+
+                TempData["Message"] = "Reservation created successfully.";
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            catch(Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
+
         }
 
     }

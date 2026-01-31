@@ -1,4 +1,5 @@
-﻿using BeautyStudioSystem.Infrastructure.Contracts;
+﻿using BeautyStudioSystem.Data.Models;
+using BeautyStudioSystem.Infrastructure.Contracts;
 using BeautyStudioSystem.Services.Contracts;
 using BeautyStudioSystem.ViewModels;
 
@@ -7,10 +8,61 @@ namespace BeautyStudioSystem.Services
     public class ReservationsService : IReservationsService
     {
         private readonly IReservationsRepository _reservationsRepository;
+        private readonly IClientsRepository _clientsRepository;
 
-        public ReservationsService(IReservationsRepository reservationsRepository)
+        public ReservationsService(IReservationsRepository reservationsRepository, IClientsRepository clientsRepository)
         {
             _reservationsRepository = reservationsRepository;
+            _clientsRepository = clientsRepository;
+        }
+
+        public async Task AddReservationAsync(CreateReservationFormModel reservationViewModel)
+        {
+            DateTime.TryParse(reservationViewModel.Date, out DateTime date);
+            TimeSpan.TryParse(reservationViewModel.StartTime, out TimeSpan startTime);
+
+            if (date == null)
+            {
+                throw new Exception("Invalid date.");
+            }
+
+            if (startTime == null)
+            {
+                throw new Exception("Invalid start time.");
+            }
+
+            DateTime reservationDateTime = date.Date + startTime;
+
+            if (reservationDateTime < DateTime.Now)
+            {
+                throw new Exception("Reservation date and time cannot be in the past.");
+            }
+
+            bool alreadyExists = await _reservationsRepository.ReservationExistsAsync(reservationViewModel.ServiceId, date);
+
+            if (alreadyExists)
+            {
+                throw new Exception("A reservation for the selected service on the specified date already exists.");
+            }
+
+            var client = await _clientsRepository.GetClientByEmailAsync(reservationViewModel.Email);
+
+            if (client == null)
+            {
+                throw new Exception("Client with the provided email does not exist.");
+            }
+
+           
+
+            var reservation = new Reservation
+            {
+                Client = client,
+                ServiceId = reservationViewModel.ServiceId,
+                Date = date,
+                StartTime = reservationDateTime
+            };
+
+            await _reservationsRepository.AddReservationAsync(reservation);
         }
 
         public async Task DeleteReservation(int id)

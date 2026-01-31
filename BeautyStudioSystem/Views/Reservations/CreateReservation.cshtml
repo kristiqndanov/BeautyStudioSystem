@@ -1,0 +1,58 @@
+﻿@model BeautyStudioSystem.ViewModels.CreateReservationFormModel
+<div asp-validation-summary="All" class="text-danger"></div>
+
+@{
+    ViewData["Title"] = "Create Reservation";
+}
+
+<h2 class="mb-4">Book a Service</h2>
+
+<form asp-action="CreateReservation" method="post" class="row g-3">
+
+    <!-- Email -->
+    <div class="col-md-6">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" placeholder="example@email.com" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <!-- Service Dropdown -->
+    <div class="col-md-6">
+        <label asp-for="ServiceId" class="form-label">Service</label>
+        <select asp-for="ServiceId"
+                class="form-select"
+                asp-items="ViewBag.Services">
+            <option value="">-- Select a service --</option>
+        </select>
+        <span asp-validation-for="ServiceId" class="text-danger"></span>
+    </div>
+
+    <!-- Date -->
+    <div class="col-md-6">
+        <label asp-for="Date" class="form-label">Date</label>
+        <input asp-for="Date" type="date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+
+    <!-- Start Time -->
+    <div class="col-md-6">
+        <label asp-for="StartTime" class="form-label">Start Time</label>
+        <input asp-for="StartTime" type="time" class="form-control" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <!-- Submit -->
+    <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">
+            Book Reservation
+        </button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">
+            Cancel
+        </a>
+    </div>
+
+</form>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

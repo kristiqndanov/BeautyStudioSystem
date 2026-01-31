@@ -8,5 +8,7 @@ namespace BeautyStudioSystem.Services.Contracts
 
         public Task<ReservationViewModel> GetReservationAsync(int id);
         public Task DeleteReservation(int id);
+
+        public Task AddReservationAsync(CreateReservationFormModel reservationViewModel);
     }
 }
