@@ -25,7 +25,7 @@
                                 Edit
                             </a>
 
-                            <form asp-controller="Services" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this service?');">
+                            <form asp-controller="Services" asp-action="DeleteService" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this service?');">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </div>

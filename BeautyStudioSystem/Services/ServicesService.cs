@@ -14,6 +14,13 @@ namespace BeautyStudioSystem.Services
         {
             _servicesRepo = servicesRepo;
         }
+
+        public async Task DeleteServiceAsync(int id)
+        {
+            var service = await _servicesRepo.GetByIdAsync(id);
+            await _servicesRepo.DeleteServiceAsync(service);
+        }
+
         public async Task<IEnumerable<ServiceViewModel>> GetAllServicesAsync()
         {
             var serviceViewModels = new List<ServiceViewModel>();

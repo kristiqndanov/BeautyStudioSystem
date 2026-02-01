@@ -8,7 +8,7 @@ namespace BeautyStudioSystem.Infrastructure.Contracts
 
         public Task<Service> GetByIdAsync(int id);
 
-        public void DeleteService(Service service);
+        public Task DeleteServiceAsync(Service service);
 
         public Task UpdateServiceAsync(Service service);
 

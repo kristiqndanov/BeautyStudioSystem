@@ -20,7 +20,7 @@ namespace BeautyStudioSystem.Infrastructure.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async void DeleteService(Service service)
+        public async Task DeleteServiceAsync(Service service)
         {
             _dbContext.Services.Remove(service);
             await _dbContext.SaveChangesAsync();

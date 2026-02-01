@@ -56,5 +56,12 @@ namespace BeautyStudioSystem.Controllers
                 return View();
             }
         }
+
+        public async Task<IActionResult> DeleteService(int id)
+        {
+            await _servicesService.DeleteServiceAsync(id);
+
+           return RedirectToAction("Index");
+        }
     }
 }

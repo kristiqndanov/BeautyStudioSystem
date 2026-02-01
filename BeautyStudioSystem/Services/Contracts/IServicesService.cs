@@ -8,5 +8,7 @@ namespace BeautyStudioSystem.Services.Contracts
         public Task<ServiceViewModel> GetServiceAsync(int id);
 
         public Task UpdateServiceAsync(ServiceViewModel serviceViewModel);
+
+        public Task DeleteServiceAsync(int id);
     }
 }
