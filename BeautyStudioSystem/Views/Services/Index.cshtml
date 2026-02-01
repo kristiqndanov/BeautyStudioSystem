@@ -6,7 +6,12 @@
 
 <div class="container mt-5">
 
-    <h1 class="text-center mb-4">Our Services</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Our Services</h1>
+        <a asp-controller="Services" asp-action="AddService" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Add Service
+        </a>
+    </div>
 
     <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">

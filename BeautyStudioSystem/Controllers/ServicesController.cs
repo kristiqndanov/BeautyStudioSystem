@@ -63,5 +63,33 @@ namespace BeautyStudioSystem.Controllers
 
            return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddService()
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> AddService(ServiceViewModel serviceViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(serviceViewModel);
+            }
+
+            try
+            {
+                await _servicesService.AddServiceAsync(serviceViewModel);
+                return RedirectToAction("Index");
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace BeautyStudioSystem.Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-        public async Task AddService(Service service)
+        public async Task AddServiceAsync(Service service)
         {
             await _dbContext.Services.AddAsync(service);
             await _dbContext.SaveChangesAsync();

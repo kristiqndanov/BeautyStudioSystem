@@ -12,6 +12,6 @@ namespace BeautyStudioSystem.Infrastructure.Contracts
 
         public Task UpdateServiceAsync(Service service);
 
-        public Task AddService(Service service);
+        public Task AddServiceAsync(Service service);
     }
 }
