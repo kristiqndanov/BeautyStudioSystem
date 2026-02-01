@@ -1,4 +1,5 @@
 ﻿using BeautyStudioSystem.Services.Contracts;
+using BeautyStudioSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautyStudioSystem.Controllers
@@ -24,6 +25,36 @@ namespace BeautyStudioSystem.Controllers
             var serviceViewModel = await _servicesService.GetServiceAsync(id);
 
             return View(serviceViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditService(int id)
+        {
+            var serviceViewModel = await _servicesService.GetServiceAsync(id);
+
+            return View(serviceViewModel);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> EditService(ServiceViewModel serviceViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(serviceViewModel);
+            }
+
+            try
+            {
+                await _servicesService.UpdateServiceAsync(serviceViewModel);
+                return RedirectToAction("Index");
+            }
+
+            catch(Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
         }
     }
 }

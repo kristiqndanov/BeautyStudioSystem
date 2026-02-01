@@ -49,5 +49,28 @@ namespace BeautyStudioSystem.Services
 
             return serviceViewModel;
         }
+
+        public async Task UpdateServiceAsync(ServiceViewModel serviceViewModel)
+        {
+            if (serviceViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(serviceViewModel));
+            }
+
+            if (serviceViewModel.Price <= 0)
+            {
+                throw new Exception("Price cannot be negative number");
+            }
+
+            var service = new Service
+            {
+                Id = serviceViewModel.Id,
+                Name = serviceViewModel.Name,
+                Price = serviceViewModel.Price,
+                Reservations = serviceViewModel.Reservations
+            };
+
+            await _servicesRepo.UpdateServiceAsync(service);
+        }
     }      
 }

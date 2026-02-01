@@ -36,7 +36,7 @@ namespace BeautyStudioSystem.Infrastructure.Repository
             return await _dbContext.Services.SingleOrDefaultAsync(s => s.Id == id);
         }
 
-        public async void UpdateService(Service service)
+        public async Task UpdateServiceAsync(Service service)
         {
             _dbContext.Services.Update(service);
             await _dbContext.SaveChangesAsync();

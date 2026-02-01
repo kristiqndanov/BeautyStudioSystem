@@ -10,7 +10,7 @@ namespace BeautyStudioSystem.Infrastructure.Contracts
 
         public void DeleteService(Service service);
 
-        public void UpdateService(Service service);
+        public Task UpdateServiceAsync(Service service);
 
         public Task AddService(Service service);
     }

@@ -6,5 +6,7 @@ namespace BeautyStudioSystem.Services.Contracts
         public Task<IEnumerable<ServiceViewModel>> GetAllServicesAsync();
 
         public Task<ServiceViewModel> GetServiceAsync(int id);
+
+        public Task UpdateServiceAsync(ServiceViewModel serviceViewModel);
     }
 }
