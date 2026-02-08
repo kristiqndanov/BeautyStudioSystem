@@ -1,6 +1,6 @@
 ﻿using BeautyStudioSystem.Data.Models;
 
-namespace BeautyStudioSystem.Infrastructure.Contracts
+namespace BeautyStudioSystem.Data.Infrastructure.Contracts
 {
     public interface IServicesRepository
     {

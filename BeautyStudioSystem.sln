@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautyStudioSystem", "BeautyStudioSystem\BeautyStudioSystem.csproj", "{DE103089-4F6F-4731-9106-B93C0CB7C5A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeautyStudioSystem", "BeautyStudioSystem\BeautyStudioSystem.csproj", "{DE103089-4F6F-4731-9106-B93C0CB7C5A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautyStudioSystem.Data", "BeautyStudioSystem.Data\BeautyStudioSystem.Data.csproj", "{3F3902E7-EBD6-4207-BCD8-762E29DE7F08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautyStudioSystem.Core", "BeautyStudioSystem.Core\BeautyStudioSystem.Core.csproj", "{720F7989-B186-46BC-8AD5-583D34CCC7FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{DE103089-4F6F-4731-9106-B93C0CB7C5A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE103089-4F6F-4731-9106-B93C0CB7C5A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE103089-4F6F-4731-9106-B93C0CB7C5A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F3902E7-EBD6-4207-BCD8-762E29DE7F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F3902E7-EBD6-4207-BCD8-762E29DE7F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F3902E7-EBD6-4207-BCD8-762E29DE7F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F3902E7-EBD6-4207-BCD8-762E29DE7F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{720F7989-B186-46BC-8AD5-583D34CCC7FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{720F7989-B186-46BC-8AD5-583D34CCC7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{720F7989-B186-46BC-8AD5-583D34CCC7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{720F7989-B186-46BC-8AD5-583D34CCC7FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

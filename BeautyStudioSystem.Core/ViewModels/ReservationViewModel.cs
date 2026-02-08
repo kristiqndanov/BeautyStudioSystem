@@ -1,7 +1,7 @@
 ﻿using BeautyStudioSystem.Data.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BeautyStudioSystem.ViewModels
+namespace BeautyStudioSystem.Core.ViewModels
 {
     public class ReservationViewModel
     {

@@ -1,8 +1,10 @@
 using BeautyStudioSystem.Data;
-using BeautyStudioSystem.Infrastructure.Repository;
-using BeautyStudioSystem.Services;
-using BeautyStudioSystem.Services.Contracts;
-using BeautyStudioSystem.Infrastructure.Contracts;
+using BeautyStudioSystem.Data.Models;
+using BeautyStudioSystem.Data.Infrastructure.Repository;
+using BeautyStudioSystem.Core.Services;
+using BeautyStudioSystem.Core;
+using BeautyStudioSystem.Core.Services.Contracts;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

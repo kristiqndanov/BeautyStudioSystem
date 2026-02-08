@@ -1,10 +1,12 @@
-﻿using BeautyStudioSystem.Data.Models;
-using BeautyStudioSystem.Infrastructure.Contracts;
-using BeautyStudioSystem.Infrastructure.Repository;
-using BeautyStudioSystem.Services.Contracts;
-using BeautyStudioSystem.ViewModels;
+﻿using BeautyStudioSystem.Core.Services.Contracts;
+using BeautyStudioSystem.Core.ViewModels;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
+using BeautyStudioSystem.Data.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
 
-namespace BeautyStudioSystem.Services
+namespace BeautyStudioSystem.Core.Services
 {
     public class ServicesService : IServicesService
     {

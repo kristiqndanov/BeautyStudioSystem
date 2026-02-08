@@ -1,6 +1,6 @@
 ﻿using BeautyStudioSystem.Data.Models;
-using BeautyStudioSystem.Services.Contracts;
-using BeautyStudioSystem.ViewModels;
+using BeautyStudioSystem.Core.Services.Contracts;
+using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 

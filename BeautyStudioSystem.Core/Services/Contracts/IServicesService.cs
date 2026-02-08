@@ -1,5 +1,5 @@
-﻿using BeautyStudioSystem.ViewModels;
-namespace BeautyStudioSystem.Services.Contracts
+﻿using BeautyStudioSystem.Core.ViewModels;
+namespace BeautyStudioSystem.Core.Services.Contracts
 {
     public interface IServicesService
     {

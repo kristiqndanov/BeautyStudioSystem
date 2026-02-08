@@ -1,4 +1,4 @@
-using BeautyStudioSystem.ViewModels;
+using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

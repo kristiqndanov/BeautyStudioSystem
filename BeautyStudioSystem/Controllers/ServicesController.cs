@@ -1,5 +1,5 @@
-﻿using BeautyStudioSystem.Services.Contracts;
-using BeautyStudioSystem.ViewModels;
+﻿using BeautyStudioSystem.Core.Services.Contracts;
+using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautyStudioSystem.Controllers

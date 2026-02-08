@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BeautyStudioSystem.ViewModels
+namespace BeautyStudioSystem.Core.ViewModels
 {
     public class CreateReservationFormModel
     {

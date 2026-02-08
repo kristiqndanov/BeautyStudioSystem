@@ -1,6 +1,6 @@
-﻿using BeautyStudioSystem.ViewModels;
+﻿using BeautyStudioSystem.Core.ViewModels;
 
-namespace BeautyStudioSystem.Services.Contracts
+namespace BeautyStudioSystem.Core.Services.Contracts
 {
     public interface IReservationsService
     {

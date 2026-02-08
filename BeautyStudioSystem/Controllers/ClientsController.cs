@@ -1,8 +1,8 @@
 ﻿using BeautyStudioSystem.Data.Models;
-using BeautyStudioSystem.Infrastructure.Contracts;
-using BeautyStudioSystem.Infrastructure.Repository;
-using BeautyStudioSystem.Services.Contracts;
-using BeautyStudioSystem.ViewModels;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
+using BeautyStudioSystem.Data.Infrastructure.Repository;
+using BeautyStudioSystem.Core.Services.Contracts;
+using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;

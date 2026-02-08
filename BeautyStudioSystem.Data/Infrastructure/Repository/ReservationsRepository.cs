@@ -1,9 +1,9 @@
 ﻿using BeautyStudioSystem.Data;
 using BeautyStudioSystem.Data.Models;
-using BeautyStudioSystem.Infrastructure.Contracts;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using Microsoft.EntityFrameworkCore;
 
-namespace BeautyStudioSystem.Infrastructure.Repository
+namespace BeautyStudioSystem.Data.Infrastructure.Repository
 {
     public class ReservationsRepository : IReservationsRepository
     {

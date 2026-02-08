@@ -1,10 +1,10 @@
 ﻿using BeautyStudioSystem.Data;
 using BeautyStudioSystem.Data.Models;
-using BeautyStudioSystem.Infrastructure.Contracts;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
-namespace BeautyStudioSystem.Infrastructure.Repository
+namespace BeautyStudioSystem.Data.Infrastructure.Repository
 {
     public class ClientsRepository : IClientsRepository
     {
