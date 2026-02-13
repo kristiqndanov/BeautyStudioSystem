@@ -6,6 +6,7 @@ using BeautyStudioSystem.Data.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace BeautyStudioSystem.Core.Services
 
@@ -13,15 +14,50 @@ namespace BeautyStudioSystem.Core.Services
     public class ClientsService : IClientsService
     {
         private readonly IClientsRepository _repo;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ClientsService(IClientsRepository repo)
+
+        public ClientsService(IClientsRepository repo, UserManager<IdentityUser> userManager)
         {
             _repo = repo;
+            _userManager = userManager;
+        }
+
+        public async Task AddClientAsync(ClientViewModel clientViewModel)
+        {
+            if (clientViewModel == null)
+            {
+                return;
+            }
+
+                var firstName = clientViewModel.FullName.Split(' ')[0];
+                var lastName = clientViewModel.FullName.Split(' ').Length > 1 ? clientViewModel.FullName.Split(' ')[1] : string.Empty;
+                var client = new Client
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = clientViewModel.Email,
+                    Phone = clientViewModel.Phone,
+                    UserId = clientViewModel.UserId
+                };
+
+               await _repo.AddClientAsync(client);
+ 
         }
 
         public async Task DeleteClientAsync(int id)
         {
             var client = await _repo.GetClientByIdAsync(id);
+
+            if (!string.IsNullOrEmpty(client.UserId))
+            {
+                var user = await _userManager.FindByIdAsync(client.UserId);
+
+                if (user != null)
+                {
+                    await _userManager.DeleteAsync(user);
+                }
+            }
 
             if (client != null)
             {
@@ -105,11 +141,10 @@ namespace BeautyStudioSystem.Core.Services
 
             if (string.IsNullOrEmpty(search))
             {
-                return clientsViewModels;
+                throw new ArgumentException("Search term cannot be empty.", nameof(search));
             }
 
-            else 
-            {
+
                 if (regex.IsMatch(search))
                 {
                     clientsViewModels = clientsViewModels
@@ -127,7 +162,7 @@ namespace BeautyStudioSystem.Core.Services
 
                 }
 
-            }
+            
         }
 
         public async Task UpdateClientAsync(ClientViewModel clientViewModel)

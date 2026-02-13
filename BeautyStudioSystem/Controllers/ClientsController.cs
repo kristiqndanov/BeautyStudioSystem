@@ -28,14 +28,28 @@ namespace BeautyStudioSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string search)
         {
-            var clientsViewModels = await _clientsService.SearchClientsAsync(search);
-
-            if (!clientsViewModels.Any())
+            if (!ModelState.IsValid)
             {
-                ViewBag.Message = "No clients found.";
+                return View();
             }
 
+            try
+            {
+                var clientsViewModels = await _clientsService.SearchClientsAsync(search);
+
+                if (!clientsViewModels.Any())
+                {
+                    ViewBag.Message = "No clients found.";
+                }
+
                 return View(clientsViewModels);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
+
         }
 
         public async Task<IActionResult> ClientReservations(int id)

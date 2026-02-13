@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeautyStudioSystem.Data.Models
 {
@@ -25,7 +26,9 @@ namespace BeautyStudioSystem.Data.Models
         [StringLength(10)]
         public string Phone { get; set; } = null!;
 
+        public string? UserId { get; set; }
 
+        public IdentityUser? User { get; set; }
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
 

@@ -18,5 +18,21 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #F6F1EB;
 }
+
+.custom-navbar {
+    background-color: #E89EB8 !important;
+}
+
+
+.btn-primary {
+    background-color: #E89EB8;
+    border-color: #D8A7A0;
+}
+
+    .btn-primary:hover {
+        background-color: goldenrod;
+        border-color: #C48E87;
+    }
