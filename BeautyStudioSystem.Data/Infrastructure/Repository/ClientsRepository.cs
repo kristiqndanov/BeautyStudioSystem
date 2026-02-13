@@ -74,6 +74,11 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
             
         }
 
+        public async Task<Client> GetClientByUserId(string userId)
+        {
+            return await _dbContext.Clients.SingleOrDefaultAsync(c => c.UserId == userId);
+        }
+
         public async Task UpdateClient(Client client)
         {
             if (client != null)

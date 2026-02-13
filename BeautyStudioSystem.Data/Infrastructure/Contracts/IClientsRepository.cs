@@ -16,5 +16,7 @@ namespace BeautyStudioSystem.Data.Infrastructure.Contracts
 
         public Task DeleteClient(int id);
 
+        public Task<Client> GetClientByUserId(string userId);
+
     }
 }

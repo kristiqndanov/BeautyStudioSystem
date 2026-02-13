@@ -1,10 +1,11 @@
 ﻿using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautyStudioSystem.Controllers
 {
-    public class ServicesController : Controller
+    public class ServicesController : ControllerBase
     {
         private readonly IServicesService _servicesService;
 
@@ -13,6 +14,7 @@ namespace BeautyStudioSystem.Controllers
             _servicesService = servicesService;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var servicesViewModels = await _servicesService.GetAllServicesAsync();
@@ -20,6 +22,7 @@ namespace BeautyStudioSystem.Controllers
             return View(servicesViewModels);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> ServiceDetails(int id)
         {
             var serviceViewModel = await _servicesService.GetServiceAsync(id);

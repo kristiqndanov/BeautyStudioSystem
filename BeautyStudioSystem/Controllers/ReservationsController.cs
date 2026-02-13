@@ -3,10 +3,11 @@ using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace BeautyStudioSystem.Controllers
 {
-    public class ReservationsController : Controller
+    public class ReservationsController : ControllerBase
     {
         private readonly IReservationsService _reservationsService;
         private readonly IServicesService _servicesService;
@@ -86,7 +87,9 @@ namespace BeautyStudioSystem.Controllers
 
             try
             {
-                await _reservationsService.AddReservationAsync(reservationViewModel);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                await _reservationsService.AddReservationAsync(reservationViewModel, userId);
 
                 TempData["Message"] = "Reservation created successfully.";
 

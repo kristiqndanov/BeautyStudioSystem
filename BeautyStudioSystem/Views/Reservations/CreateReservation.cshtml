@@ -10,13 +10,6 @@
 
 <form asp-action="CreateReservation" method="post" class="row g-3">
 
-    <!-- Email -->
-    <div class="col-md-6">
-        <label asp-for="Email" class="form-label">Email</label>
-        <input asp-for="Email" class="form-control" placeholder="example@email.com" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
     <!-- Service Dropdown -->
     <div class="col-md-6">
         <label asp-for="ServiceId" class="form-label">Service</label>

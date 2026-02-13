@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace BeautyStudioSystem.Controllers
 {
-    public class ClientsController : Controller
+    public class ClientsController : ControllerBase
     {
         private IClientsService _clientsService;
 

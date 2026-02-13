@@ -1,4 +1,5 @@
 ﻿using BeautyStudioSystem.Core.ViewModels;
+using System.Runtime.CompilerServices;
 
 namespace BeautyStudioSystem.Core.Services.Contracts
 {
@@ -9,6 +10,6 @@ namespace BeautyStudioSystem.Core.Services.Contracts
         public Task<ReservationViewModel> GetReservationAsync(int id);
         public Task DeleteReservation(int id);
 
-        public Task AddReservationAsync(CreateReservationFormModel reservationViewModel);
+        public Task AddReservationAsync(CreateReservationFormModel reservationFormModel, string email);
     }
 }

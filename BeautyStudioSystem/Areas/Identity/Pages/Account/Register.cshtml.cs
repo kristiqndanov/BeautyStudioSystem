@@ -80,14 +80,14 @@ namespace BeautyStudioSystem.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "First Name")]
             [MaxLength(InputValidations.FirstNameMaxLength)]
-            [MinLength(InputValidations.FirstNameMinLength)]
+            [MinLength(InputValidations.FirstNameMinLength, ErrorMessage = "First name should be longer than 3 characters.")]
 
             public string FirstName { get; set; }
 
             [Required]
             [Display(Name = "Last Name")]
             [MaxLength(InputValidations.LastNameMaxLength)]
-            [MinLength(InputValidations.LastNameMinLength)]
+            [MinLength(InputValidations.LastNameMinLength, ErrorMessage = "Last name should be longer than 3 characters.")]
             public string LastName { get; set; }
 
             [Required]
@@ -148,6 +148,20 @@ namespace BeautyStudioSystem.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    if (string.IsNullOrWhiteSpace(Input.FirstName))
+                    {
+                        ModelState.AddModelError("Input.FirstName", "First name cannot be empty.");
+                    }
+
+                    if (string.IsNullOrWhiteSpace(Input.LastName))
+                    {
+                        ModelState.AddModelError("Input.LastName", "Last name cannot be empty.");
+                    }
+
+                    if (string.IsNullOrWhiteSpace(Input.Phone))
+                    {
+                        ModelState.AddModelError("Input.Phone", "Phone must be exactly 10 digits.");
+                    }
                     var clientViewModel = new ClientViewModel
                     {
                         FullName = Input.FirstName + " " + Input.LastName,

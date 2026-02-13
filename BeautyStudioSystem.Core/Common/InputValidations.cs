@@ -1,6 +1,6 @@
 ﻿namespace BeautyStudioSystem.Core.Common
 {
-    public class InputValidations
+    public static class InputValidations
     {
         /* Client Constraints */
         public const int FirstNameMinLength = 3;

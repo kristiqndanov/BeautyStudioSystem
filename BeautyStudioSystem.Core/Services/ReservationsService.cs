@@ -19,10 +19,10 @@ namespace BeautyStudioSystem.Core.Services
             _clientsRepository = clientsRepository;
         }
 
-        public async Task AddReservationAsync(CreateReservationFormModel reservationViewModel)
+        public async Task AddReservationAsync(CreateReservationFormModel reservationFormModel, string userId)
         {
-            DateTime.TryParse(reservationViewModel.Date, out DateTime date);
-            TimeSpan.TryParse(reservationViewModel.StartTime, out TimeSpan startTime);
+            DateTime.TryParse(reservationFormModel.Date, out DateTime date);
+            TimeSpan.TryParse(reservationFormModel.StartTime, out TimeSpan startTime);
 
             if (date == null)
             {
@@ -41,18 +41,19 @@ namespace BeautyStudioSystem.Core.Services
                 throw new Exception("Reservation date and time cannot be in the past.");
             }
 
-            bool alreadyExists = await _reservationsRepository.ReservationExistsAsync(reservationViewModel.ServiceId, date);
+            bool alreadyExists = await _reservationsRepository.ReservationExistsAsync(reservationFormModel.ServiceId, date);
 
             if (alreadyExists)
             {
                 throw new Exception("A reservation for the selected service on the specified date already exists.");
             }
 
-            var client = await _clientsRepository.GetClientByEmailAsync(reservationViewModel.Email);
+            var client = await _clientsRepository.GetClientByUserId(userId);
+
 
             if (client == null)
             {
-                throw new Exception("Client with the provided email does not exist.");
+                throw new Exception("Your account doesn't exist on the database.");
             }
 
            
@@ -60,7 +61,7 @@ namespace BeautyStudioSystem.Core.Services
             var reservation = new Reservation
             {
                 Client = client,
-                ServiceId = reservationViewModel.ServiceId,
+                ServiceId = reservationFormModel.ServiceId,
                 Date = date,
                 StartTime = reservationDateTime
             };
