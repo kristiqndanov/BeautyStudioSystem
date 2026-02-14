@@ -18,5 +18,7 @@ namespace BeautyStudioSystem.Core.Services.Contracts
 
         public Task AddClientAsync(ClientViewModel clientViewModel);
 
+        public Task<int> GetClientIdByUserId(string id);
+
     }
 }

@@ -99,6 +99,18 @@ namespace BeautyStudioSystem.Core.Services
             return clientViewModel;
         }
 
+        public async Task<int> GetClientIdByUserId(string id)
+        {
+            var client = await _repo.GetClientByUserId(id);
+
+            if (client == null)
+            {
+                throw new ArgumentException("No client found with the provided user ID.", nameof(id));
+            }
+
+            return client.Id;
+        }
+
         public async Task<IEnumerable<ReservationViewModel>> GetClientReservations(int id)
         {
             var client = await _repo.GetClientByIdAsync(id); 

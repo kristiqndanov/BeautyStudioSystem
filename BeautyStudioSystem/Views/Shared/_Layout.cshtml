@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BeautyStudioSystem.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
 
 </head>
@@ -23,7 +24,7 @@
                     <img src="~/images/logo.png"
                          width="32"
                          height="32"
-                         class="me-2" />
+                         class="me-2 rounded-circle" />
                     <span>BeautyStudioSystem</span>
                 </a>
 
@@ -57,10 +58,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Reservations" asp-action="CreateReservation">Make Reservation</a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Clients" asp-action="MyReservations">My Reservations</a>
+                            </li>
                         }
 
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Services" asp-action="Index">Services</a>
+                        </li>
+
+                         <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Contacts">Contacts</a>
                         </li>
 
                     </ul>

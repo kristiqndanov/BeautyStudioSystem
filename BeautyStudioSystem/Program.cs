@@ -42,8 +42,7 @@ namespace BeautyStudioSystem
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                db.Database.EnsureDeleted();
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
 
 
                 var services = scope.ServiceProvider;

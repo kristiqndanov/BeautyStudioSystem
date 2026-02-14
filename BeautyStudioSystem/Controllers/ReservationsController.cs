@@ -41,11 +41,16 @@ namespace BeautyStudioSystem.Controllers
 
             TempData["Message"] = "Reservation deleted successfully.";
 
-            return RedirectToAction(
-                "ClientReservations",   
-                "Clients",             
-                new { id = reservation.ClientId }
-            );
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction(
+                    "ClientReservations",
+                    "Clients",
+                    new { id = reservation.ClientId }
+                );
+            }
+
+            return RedirectToAction("MyReservations", "Clients");
         }
 
         [HttpGet]

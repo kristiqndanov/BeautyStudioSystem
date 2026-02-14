@@ -1,39 +1,50 @@
-﻿@model BeautyStudioSystem.Core.ViewModels.ServiceViewModel
+﻿<div class="card shadow text-white"
+     style="
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url('@Url.Content($"~/images/services/{Model.Id}.png")');
+        background-size: cover;
+        background-position: center;
+        min-height: 350px;
+     ">
+    <div class="card-body text-center d-flex flex-column justify-content-center">
+        <h2 class="card-title">@Model.Name</h2>
 
-@{
-    ViewData["Title"] = "Service Details";
-}
+        <p class="fs-4 mb-3">
+            <strong>Price:</strong> @Model.Price.ToString("C")
+        </p>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <h2 class="card-title">@Model.Name</h2>
-
-                    <p class="fs-4 mb-2">
-                        <strong>Price:</strong> @Model.Price.ToString("C")
-                    </p>
-
-                    <div class="mt-4 d-flex justify-content-between">
-                        <a asp-controller="Services" asp-action="Index" class="btn btn-secondary">
-                            Back to Services
-                        </a>
-
-                        <div>
-                            <a asp-controller="Services" asp-action="EditService" asp-route-id="@Model.Id" class="btn btn-primary me-2">
-                                Edit
-                            </a>
-
-                            <form asp-controller="Services" asp-action="DeleteService" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this service?');">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            @* Optional: add a detailed reservations list below if you want to show individual reservation info. *@
+    
+        <div class="mb-4">
+            <a asp-controller="Reservations"
+               asp-action="CreateReservation"
+               asp-route-serviceId="@Model.Id"
+               class="btn btn-success btn-lg">
+                Make Reservation
+            </a>
         </div>
+
+       
+        @if (User.IsInRole("Admin"))
+        {
+                <div class="d-flex justify-content-center">
+                    <a asp-controller="Services"
+                       asp-action="EditService"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-primary me-2">
+                        Edit
+                    </a>
+
+                    <form asp-controller="Services"
+                          asp-action="DeleteService"
+                          asp-route-id="@Model.Id"
+                          method="post"
+                          class="d-inline"
+                          onsubmit="return confirm('Are you sure you want to delete this service?');">
+                        <button type="submit" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+        }
     </div>
 </div>

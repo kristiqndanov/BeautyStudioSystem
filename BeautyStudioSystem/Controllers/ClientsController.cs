@@ -7,20 +7,23 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BeautyStudioSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class ClientsController : ControllerBase
     {
-        private IClientsService _clientsService;
+        private readonly IClientsService _clientsService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ClientsController(IClientsService clientsService)
+        public ClientsController(IClientsService clientsService, UserManager<IdentityUser> userManager)
         {
             this._clientsService = clientsService;
+            this._userManager = userManager;
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var clientsViewModels = await _clientsService.GetAllClientsAsync();
@@ -28,6 +31,7 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string search)
         {
             if (!ModelState.IsValid)
@@ -54,6 +58,7 @@ namespace BeautyStudioSystem.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ClientReservations(int id)
         {
             var reservationViewModels = await _clientsService.GetClientReservations(id);
@@ -77,6 +82,7 @@ namespace BeautyStudioSystem.Controllers
             return View(reservationViewModels);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteClient(int id)
         {
             var clientViewModel = await _clientsService.GetClientByIdAsync(id);
@@ -94,6 +100,7 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateClient(int id)
         {
             var client = await _clientsService.GetClientByIdAsync(id);
@@ -107,6 +114,7 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateClient(ClientViewModel clientViewModel)
         {
             if (!ModelState.IsValid)
@@ -118,5 +126,32 @@ namespace BeautyStudioSystem.Controllers
             TempData["Message"] = "Client updated successfully.";
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> MyReservations()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+
+            var clientId = await _clientsService.GetClientIdByUserId(user.Id);
+
+            var reservationViewModels = await _clientsService.GetClientReservations(clientId);
+
+            if (!reservationViewModels.Any())
+            {
+                ViewBag.Message = "You do not have any reservations yet.";
+            }
+
+            if (reservationViewModels.Any())
+            {
+                ViewBag.ClientName = reservationViewModels.First().ClientName;
+            }
+            else
+            {
+                ViewBag.ClientName = "Client";
+            }
+
+            return View(reservationViewModels);
+        }
+
     }
 }
