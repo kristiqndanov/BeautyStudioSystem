@@ -1,4 +1,5 @@
-﻿using BeautyStudioSystem.Data.Models;
+﻿using BeautyStudioSystem.Core.Common;
+using BeautyStudioSystem.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,7 +11,7 @@ namespace BeautyStudioSystem.Core.ViewModels
         public int Id { get; set; }
 
         [Required]
-        [StringLength(300)]
+        [MaxLength(InputValidations.ServiceNameMaxLength)]
         public string Name { get; set; } = null!;
 
         [Required]

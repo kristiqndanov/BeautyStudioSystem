@@ -7,12 +7,13 @@ using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using BeautyStudioSystem.Data.Seed;
 
 namespace BeautyStudioSystem
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ namespace BeautyStudioSystem
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -40,11 +42,12 @@ namespace BeautyStudioSystem
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                // DELETE the database if it exists
                 db.Database.EnsureDeleted();
-
-                // CREATE the database and all tables according to your OnModelCreating
                 db.Database.EnsureCreated();
+
+
+                var services = scope.ServiceProvider;
+                await DataSeeder.SeedAsync(services);
             }
 
 

@@ -11,5 +11,8 @@
         public const int FullNameMaxLength = 510;
         public const int EmailMaxLength = 255;
         public const int PhoneLength = 10;
+
+        /*Service Constraints */
+        public const int ServiceNameMaxLength = 300;
     }
 }

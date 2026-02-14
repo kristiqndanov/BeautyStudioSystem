@@ -31,6 +31,7 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditService(int id)
         {
             var serviceViewModel = await _servicesService.GetServiceAsync(id);
@@ -39,7 +40,7 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpPost]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditService(ServiceViewModel serviceViewModel)
         {
             if (!ModelState.IsValid)
@@ -60,6 +61,7 @@ namespace BeautyStudioSystem.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteService(int id)
         {
             await _servicesService.DeleteServiceAsync(id);
@@ -68,13 +70,14 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddService()
         {
             return View();
         }
 
         [HttpPost]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddService(ServiceViewModel serviceViewModel)
         {
             if (!ModelState.IsValid)

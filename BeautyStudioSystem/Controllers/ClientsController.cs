@@ -6,9 +6,11 @@ using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BeautyStudioSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ClientsController : ControllerBase
     {
         private IClientsService _clientsService;
