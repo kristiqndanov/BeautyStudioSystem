@@ -5,9 +5,14 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeautyStudioSystem", "BeautyStudioSystem\BeautyStudioSystem.csproj", "{DE103089-4F6F-4731-9106-B93C0CB7C5A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautyStudioSystem.Data", "BeautyStudioSystem.Data\BeautyStudioSystem.Data.csproj", "{3F3902E7-EBD6-4207-BCD8-762E29DE7F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeautyStudioSystem.Data", "BeautyStudioSystem.Data\BeautyStudioSystem.Data.csproj", "{3F3902E7-EBD6-4207-BCD8-762E29DE7F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautyStudioSystem.Core", "BeautyStudioSystem.Core\BeautyStudioSystem.Core.csproj", "{720F7989-B186-46BC-8AD5-583D34CCC7FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeautyStudioSystem.Core", "BeautyStudioSystem.Core\BeautyStudioSystem.Core.csproj", "{720F7989-B186-46BC-8AD5-583D34CCC7FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1BAF98D8-C962-4EC3-9C76-52A63535C6B0}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
