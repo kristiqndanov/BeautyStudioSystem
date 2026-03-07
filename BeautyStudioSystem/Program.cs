@@ -31,6 +31,8 @@ namespace BeautyStudioSystem
             builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
             builder.Services.AddScoped<IServicesRepository, ServicesRepository>();
             builder.Services.AddScoped<IReservationsRepository, ReservationsRepository>();
+            builder.Services.AddScoped<IServiceCategoryRepository, ServiceCategoryRepository>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             builder.Services.AddScoped<IClientsService, ClientsService>();
             builder.Services.AddScoped<IServicesService, ServicesService>();

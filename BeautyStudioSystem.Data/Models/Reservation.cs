@@ -19,10 +19,18 @@ namespace BeautyStudioSystem.Data.Models
         public Service? Service { get; set; }
 
         [Required]
+        public int EmployeeId { get; set; }
+
+        public Employee? Employee { get; set; }
+
+        [Required]
         public DateTime Date { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }
+
+        [Required]
+        public DateTime EndTime { get; set; }
 
 
     }

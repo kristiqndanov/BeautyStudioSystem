@@ -14,7 +14,8 @@ namespace BeautyStudioSystem.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
-
+        public DbSet<ServiceCategory> ServiceCategories { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

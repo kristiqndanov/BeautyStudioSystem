@@ -2,11 +2,6 @@
 using BeautyStudioSystem.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeautyStudioSystem.Data.Seed
 {
@@ -20,15 +15,19 @@ namespace BeautyStudioSystem.Data.Seed
             await SeedRolesAsync(roleManager);
             await SeedAdminAsync(userManager, services.GetRequiredService<IClientsRepository>());
             await SeedClientsAsync(userManager, services.GetRequiredService<IClientsRepository>());
-            await SeedServicesAsync(services.GetRequiredService<IServicesRepository>());
-            await SeedReservationsAsync(services.GetRequiredService<IReservationsRepository>(), services.GetRequiredService<IClientsRepository>(), services.GetRequiredService<IServicesRepository>());
-
+            await SeedEmployeesAsync(userManager, services.GetRequiredService<IEmployeeRepository>());
+            await SeedServiceCategoriesAsync(services.GetRequiredService<IServiceCategoryRepository>());
+            await SeedServicesAsync(services.GetRequiredService<IServicesRepository>(), services.GetRequiredService<IServiceCategoryRepository>());
+            await SeedReservationsAsync(
+                services.GetRequiredService<IReservationsRepository>(),
+                services.GetRequiredService<IClientsRepository>(),
+                services.GetRequiredService<IServicesRepository>(),
+                services.GetRequiredService<IEmployeeRepository>());
         }
+
         private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-            List<string> roles = new List<string>();
-            roles.Add("Admin");
-            roles.Add("Client");
+            var roles = new List<string> { "Admin", "Client", "Employee" };
 
             foreach (var role in roles)
             {
@@ -41,156 +40,199 @@ namespace BeautyStudioSystem.Data.Seed
 
         private static async Task SeedAdminAsync(UserManager<IdentityUser> userManager, IClientsRepository clientsRepository)
         {
-            string adminFirstName = "admin";
-            string adminLastName = "admin";
             string adminEmail = "admin@admin.com";
-            string adminPhone = "0123456789";
             string adminPassword = "Admin123!";
 
-            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+            if (await userManager.FindByEmailAsync(adminEmail) != null) return;
 
-            if (adminUser == null)
+            var user = new IdentityUser
             {
-                var user = new IdentityUser
+                UserName = adminEmail,
+                Email = adminEmail,
+                PhoneNumber = "0123456789",
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(user, adminPassword);
+
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, "Admin");
+
+                await clientsRepository.AddClientAsync(new Client
                 {
-                    UserName = adminEmail,
+                    FirstName = "Admin",
+                    LastName = "Admin",
                     Email = adminEmail,
-                    PhoneNumber = adminPhone,
-                    EmailConfirmed = true
-                };
-
-                var result = await userManager.CreateAsync(user, adminPassword);
-
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Admin");
-
-
-                    var admin = new Client
-                    {
-                        FirstName = adminFirstName,
-                        LastName = adminLastName,
-                        Email = adminEmail,
-                        Phone = adminPhone,
-                        UserId = user.Id,
-
-                    };
-
-                    await clientsRepository.AddClientAsync(admin);
-                }
+                    Phone = "0123456789",
+                    UserId = user.Id
+                });
             }
         }
 
         private static async Task SeedClientsAsync(UserManager<IdentityUser> userManager, IClientsRepository clientsRepository)
         {
-
             var clientsData = new List<(string FirstName, string LastName, string Email, string Phone)>
             {
-                ("Vanq", "Petrova", "vanq.petrova@gmail.com", "0111223344"),
+                ("Vanya", "Petrova", "vanq.petrova@gmail.com", "0111223344"),
                 ("Anna", "Vasileva", "anna.vasileva@abv.bg", "0123455555"),
                 ("Kristina", "Hristova", "kristina.hristova@gmail.com", "0123456666")
             };
 
-            string clientPassword = "Client123!";
-
-            foreach (var clientInfo in clientsData)
+            foreach (var c in clientsData)
             {
-                var existingUser = await userManager.FindByEmailAsync(clientInfo.Email);
-
-                if (existingUser != null)
-                {
-                    continue;
-                }
+                if (await userManager.FindByEmailAsync(c.Email) != null) continue;
 
                 var user = new IdentityUser
                 {
-                    UserName = clientInfo.Email,
-                    Email = clientInfo.Email,
-                    PhoneNumber = clientInfo.Phone,
+                    UserName = c.Email,
+                    Email = c.Email,
+                    PhoneNumber = c.Phone,
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(user, clientPassword);
+                var result = await userManager.CreateAsync(user, "Client123!");
 
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "Client");
 
-                    var client = new Client
+                    await clientsRepository.AddClientAsync(new Client
                     {
-                        FirstName = clientInfo.FirstName,
-                        LastName = clientInfo.LastName,
-                        Email = clientInfo.Email,
-                        Phone = clientInfo.Phone,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        Email = c.Email,
+                        Phone = c.Phone,
                         UserId = user.Id
-                    };
-
-                    await clientsRepository.AddClientAsync(client);
+                    });
                 }
             }
         }
 
-        private static async Task SeedServicesAsync(IServicesRepository servicesRepository)
+        private static async Task SeedEmployeesAsync(UserManager<IdentityUser> userManager, IEmployeeRepository employeeRepository)
         {
-            var servicesData = new List<(string Name, decimal Price)>
+            var employeesData = new List<(string FirstName, string LastName, string Email, string Phone)>
             {
-                ("Haircut & Styling", 40.00m),
-                ("Manicure", 30.00m),
-                ("Facial Treatment", 60.00m)
+                ("Maria", "Todorova", "maria.todorova@beautystudio.com", "0888111222"),
+                ("Elena", "Georgieva", "elena.georgieva@beautystudio.com", "0888333444")
             };
 
-            foreach (var serviceInfo in servicesData)
+            foreach (var e in employeesData)
             {
-                var allServices = await servicesRepository.GetAllAsync();
-                var existingService = allServices.FirstOrDefault(s => s.Name == serviceInfo.Name);
+                if (await userManager.FindByEmailAsync(e.Email) != null) continue;
 
-                if (existingService != null)
+                var user = new IdentityUser
                 {
-                    continue;
-                }
-
-                var service = new Service
-                {
-                    Name = serviceInfo.Name,
-                    Price = serviceInfo.Price
+                    UserName = e.Email,
+                    Email = e.Email,
+                    PhoneNumber = e.Phone,
+                    EmailConfirmed = true
                 };
 
-                await servicesRepository.AddServiceAsync(service);
+                var result = await userManager.CreateAsync(user, "Employee123!");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Employee");
+
+                    await employeeRepository.AddEmployeeAsync(new Employee
+                    {
+                        FirstName = e.FirstName,
+                        LastName = e.LastName,
+                        Phone = e.Phone,
+                        Email = e.Email,
+                        UserId = user.Id
+                    });
+                }
             }
         }
 
-        private static async Task SeedReservationsAsync(IReservationsRepository reservationsRepository, IClientsRepository clientsRepository, IServicesRepository servicesRepository)
+        private static async Task SeedServiceCategoriesAsync(IServiceCategoryRepository serviceCategoryRepository)
         {
-            var reservationsData = new List<(int ClientId, int ServiceId, DateTime Date, DateTime StartTime)>
+            var categories = new List<string> { "Hair", "Nails", "Face" };
+
+            var existing = await serviceCategoryRepository.GetAllAsync();
+
+            foreach (var category in categories)
             {
-                (2, 1, new DateTime(2026, 2, 1), new DateTime(2026, 2, 1, 10, 0, 0)),
-                (3, 2, new DateTime(2026, 2, 2), new DateTime(2026, 2, 2, 12, 0, 0)),
-                (4, 3, new DateTime(2026, 2, 3), new DateTime(2026, 2, 3, 15, 0, 0))
+                if (existing.Any(c => c.Name == category)) continue;
+
+                await serviceCategoryRepository.AddServiceCategoryAsync(new ServiceCategory
+                {
+                    Name = category
+                });
+            }
+        }
+
+        private static async Task SeedServicesAsync(IServicesRepository servicesRepository, IServiceCategoryRepository serviceCategoryRepository)
+        {
+            var allServices = await servicesRepository.GetAllAsync();
+            var allCategories = await serviceCategoryRepository.GetAllAsync();
+
+            var servicesData = new List<(string Name, decimal Price, int DurationMinutes, string CategoryName)>
+            {
+                ("Haircut & Styling", 40.00m, 60, "Hair"),
+                ("Manicure", 30.00m, 45, "Nails"),
+                ("Facial Treatment", 60.00m, 75, "Face")
             };
 
-            foreach (var reservationInfo in reservationsData)
+            foreach (var s in servicesData)
             {
-                var allReservations = await reservationsRepository.GetAllAsync();
-                var existingReservation = allReservations.FirstOrDefault(r =>
-                    r.ClientId == reservationInfo.ClientId &&
-                    r.ServiceId == reservationInfo.ServiceId &&
-                    r.Date == reservationInfo.Date &&
-                    r.StartTime == reservationInfo.StartTime);
+                if (allServices.Any(x => x.Name == s.Name)) continue;
 
-                if (existingReservation != null)
+                var category = allCategories.FirstOrDefault(c => c.Name == s.CategoryName);
+                if (category == null) continue;
+
+                await servicesRepository.AddServiceAsync(new Service
                 {
-                    continue;
-                }
+                    Name = s.Name,
+                    Price = s.Price,
+                    Duration = s.DurationMinutes,
+                    ServiceCategoryId = category.Id
+                });
+            }
+        }
 
-                var reservation = new Reservation
+        private static async Task SeedReservationsAsync(
+            IReservationsRepository reservationsRepository,
+            IClientsRepository clientsRepository,
+            IServicesRepository servicesRepository,
+            IEmployeeRepository employeeRepository)
+        {
+            var allReservations = await reservationsRepository.GetAllAsync();
+            var allServices = await servicesRepository.GetAllAsync();
+            var allEmployees = await employeeRepository.GetAllAsync();
+
+            if (allReservations.Any()) return;
+
+            var reservationsData = new List<(int ClientId, int ServiceId, int EmployeeIndex, DateTime Date, DateTime StartTime)>
+            {
+                (2, 1, 0, new DateTime(2026, 4, 1), new DateTime(2026, 4, 1, 10, 0, 0)),
+                (3, 2, 1, new DateTime(2026, 4, 2), new DateTime(2026, 4, 2, 12, 0, 0)),
+                (4, 3, 0, new DateTime(2026, 4, 3), new DateTime(2026, 4, 3, 15, 0, 0))
+            };
+
+            var employeeList = allEmployees.ToList();
+            var serviceList = allServices.ToList();
+
+            foreach (var r in reservationsData)
+            {
+                var service = serviceList.FirstOrDefault(s => s.Id == r.ServiceId);
+                var employee = employeeList.ElementAtOrDefault(r.EmployeeIndex);
+
+                if (service == null || employee == null) continue;
+
+                var endTime = r.StartTime.AddMinutes(service.Duration);
+
+                await reservationsRepository.AddReservationAsync(new Reservation
                 {
-                    ClientId = reservationInfo.ClientId,
-                    ServiceId = reservationInfo.ServiceId,
-                    Date = reservationInfo.Date,
-                    StartTime = reservationInfo.StartTime
-                };
-
-                await reservationsRepository.AddReservationAsync(reservation);
+                    ClientId = r.ClientId,
+                    ServiceId = r.ServiceId,
+                    EmployeeId = employee.Id,
+                    Date = r.Date,
+                    StartTime = r.StartTime,
+                    EndTime = endTime
+                });
             }
         }
     }
