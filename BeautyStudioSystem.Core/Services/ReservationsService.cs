@@ -12,40 +12,54 @@ namespace BeautyStudioSystem.Core.Services
     {
         private readonly IReservationsRepository _reservationsRepository;
         private readonly IClientsRepository _clientsRepository;
+        private readonly IServicesRepository _servicesRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public ReservationsService(IReservationsRepository reservationsRepository, IClientsRepository clientsRepository)
+        public ReservationsService(IReservationsRepository reservationsRepository, IClientsRepository clientsRepository, IServicesRepository servicesRepository, IEmployeeRepository employeeRepository)
         {
             _reservationsRepository = reservationsRepository;
             _clientsRepository = clientsRepository;
+            _servicesRepository = servicesRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task AddReservationAsync(CreateReservationFormModel reservationFormModel, string userId)
         {
-            DateTime.TryParse(reservationFormModel.Date, out DateTime date);
-            TimeSpan.TryParse(reservationFormModel.StartTime, out TimeSpan startTime);
-
-            if (date == null)
+            if (!DateTime.TryParse(reservationFormModel.Date, out DateTime date))
             {
-                throw new Exception("Invalid date.");
+                throw new ArgumentException("Invalid date.");
             }
 
-            if (startTime == null)
+            if (!TimeSpan.TryParse(reservationFormModel.StartTime, out TimeSpan startTime))
             {
-                throw new Exception("Invalid start time.");
+                throw new ArgumentException("Invalid start time.");
             }
 
-            DateTime reservationDateTime = date.Date + startTime;
+            DateTime reservationStartDateTime = date.Date + startTime;
 
-            if (reservationDateTime < DateTime.Now)
+            if (reservationStartDateTime < DateTime.Now)
             {
-                throw new Exception("Reservation date and time cannot be in the past.");
+                throw new ArgumentException("Reservation date and time cannot be in the past.");
             }
 
-            bool alreadyExists = await _reservationsRepository.ReservationExistsAsync(reservationFormModel.ServiceId, date);
+            var service = await _servicesRepository.GetByIdAsync(reservationFormModel.ServiceId);
 
-            if (alreadyExists)
+            if (service == null)
             {
-                throw new Exception("A reservation for the selected service on the specified date already exists.");
+                throw new ArgumentException("Selected service does not exist.");
+            }
+
+            DateTime reservationEndDateTime = reservationStartDateTime.AddMinutes(service.Duration);
+
+            bool isEmployeeAvailable = await _employeeRepository.IsEmployeeAvailableAsync(
+                reservationFormModel.EmployeeId,
+                date,
+                reservationStartDateTime,
+                reservationEndDateTime);
+
+            if (!isEmployeeAvailable)
+            {
+                throw new InvalidOperationException("Another reservation is already booked for this employee at the same time.");
             }
 
             var client = await _clientsRepository.GetClientByUserId(userId);
@@ -62,8 +76,10 @@ namespace BeautyStudioSystem.Core.Services
             {
                 Client = client,
                 ServiceId = reservationFormModel.ServiceId,
+                EmployeeId = reservationFormModel.EmployeeId,
                 Date = date,
-                StartTime = reservationDateTime
+                StartTime = reservationStartDateTime,
+                EndTime = reservationEndDateTime
             };
 
             await _reservationsRepository.AddReservationAsync(reservation);
@@ -95,7 +111,9 @@ namespace BeautyStudioSystem.Core.Services
                     Date = reservation.Date.ToShortDateString(),
                     ClientName = $"{reservation.Client.FirstName} {reservation.Client.LastName}",
                     ServiceName = $"{reservation.Service.Name}",
-                    StartTime = reservation.StartTime.ToShortTimeString()
+                    EmployeeName = $"{reservation.Employee.FirstName} {reservation.Employee.LastName}",
+                    StartTime = reservation.StartTime.ToShortTimeString(),
+                    EndTime = reservation.EndTime.ToShortTimeString()
                 };
 
                 reservationViewModels.Add(reservationViewModel);
@@ -108,17 +126,48 @@ namespace BeautyStudioSystem.Core.Services
         {
             var reservation = await _reservationsRepository.GetByIdAsync(id);
 
+            if (reservation == null)
+            {
+                throw new ArgumentException("Reservation not found.");
+            }
+
             var reservationViewModel = new ReservationViewModel
             {
                 Id = reservation.Id,
                 Date = reservation.Date.ToShortDateString(),
                 ClientName = $"{reservation.Client.FirstName} {reservation.Client.LastName}",
-                ServiceName = $"{reservation.Service.Name}",
+                ServiceName = reservation.Service.Name,
+                EmployeeName = $"{reservation.Employee.FirstName} {reservation.Employee.LastName}",
                 ClientId = reservation.ClientId,
-                StartTime = reservation.StartTime.ToShortTimeString()
+                StartTime = reservation.StartTime.ToShortTimeString(),
+                EndTime = reservation.EndTime.ToShortTimeString()
             };
 
             return reservationViewModel;
+        }
+
+        public async Task<IEnumerable<ReservationViewModel>> GetReservationsByEmployeeAsync(string userId)
+        {
+            var employee = await _employeeRepository.GetByUserIdAsync(userId);
+
+            if (employee == null)
+            {
+                throw new Exception("Employee doesn't exist.");
+            }
+
+            var allReservations = await _reservationsRepository.GetAllAsync();
+
+            return allReservations.Where(r => r.EmployeeId == employee.Id)
+                .Select(r => new ReservationViewModel
+                {
+                    Id = r.Id,
+                    Date = r.Date.ToShortDateString(),
+                    ClientName = $"{r.Client.FirstName} {r.Client.LastName}",
+                    ServiceName = r.Service.Name,
+                    EmployeeName = $"{r.Employee.FirstName} {r.Employee.LastName}",
+                    StartTime = r.StartTime.ToShortTimeString(),
+                    EndTime = r.EndTime.ToShortTimeString()
+                });
         }
     }
 }

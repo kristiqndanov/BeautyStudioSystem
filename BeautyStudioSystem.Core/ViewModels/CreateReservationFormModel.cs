@@ -9,6 +9,9 @@ namespace BeautyStudioSystem.Core.ViewModels
         public int ServiceId { get; set; }
 
         [Required]
+        public int EmployeeId { get; set; }
+
+        [Required]
         public string Date { get; set; } = null!;
 
         [Required]

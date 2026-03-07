@@ -17,5 +17,7 @@ namespace BeautyStudioSystem.Data.Infrastructure.Contracts
 
         Task UpdateEmployee(Employee employee);
         Task DeleteEmployee(Employee employee);
+
+        Task<Employee> GetByUserIdAsync(string userId);
     }
 }

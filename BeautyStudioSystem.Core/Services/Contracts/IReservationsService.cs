@@ -11,5 +11,6 @@ namespace BeautyStudioSystem.Core.Services.Contracts
         public Task DeleteReservation(int id);
 
         public Task AddReservationAsync(CreateReservationFormModel reservationFormModel, string email);
+        public Task<IEnumerable<ReservationViewModel>> GetReservationsByEmployeeAsync(string userId);
     }
 }

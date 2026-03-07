@@ -27,7 +27,11 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
 
         public async Task<IEnumerable<Reservation>> GetAllAsync()
         {
-            return await _dbContext.Reservations.ToListAsync();
+            return await _dbContext.Reservations
+                .Include(r => r.Client)
+                .Include(r => r.Service)
+                .Include(r => r.Employee)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Reservation>> GetAllByClientNameAsync(string name)
@@ -42,9 +46,10 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
 
         public async Task<Reservation> GetByIdAsync(int id)
         {
-           return await _dbContext.Reservations
+            return await _dbContext.Reservations
                 .Include(r => r.Client)
                 .Include(r => r.Service)
+                .Include(r => r.Employee)
                 .SingleOrDefaultAsync(r => r.Id == id);
         }
 
