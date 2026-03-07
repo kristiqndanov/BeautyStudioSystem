@@ -1,24 +1,39 @@
-﻿
-@model BeautyStudioSystem.Core.ViewModels.CreateReservationFormModel
-<div asp-validation-summary="All" class="text-danger"></div>
-
+﻿@model BeautyStudioSystem.Core.ViewModels.CreateReservationFormModel
 @{
     ViewData["Title"] = "Create Reservation";
 }
-
+<div asp-validation-summary="All" class="text-danger"></div>
 <h2 class="mb-4">Book a Service</h2>
-
 <form asp-action="CreateReservation" method="post" class="row g-3">
 
     <!-- Service Dropdown -->
     <div class="col-md-6">
         <label asp-for="ServiceId" class="form-label">Service</label>
-        <select asp-for="ServiceId"
-                class="form-select"
-                asp-items="ViewBag.Services">
+        <select id="serviceDropdown"
+                asp-for="ServiceId"
+                class="form-select">
             <option value="">-- Select a service --</option>
+            @foreach (var service in ViewBag.Services)
+            {
+                    <option value="@service.Value"
+                            data-category-id="@ViewBag.ServiceCategories[service.Value]">
+                    @service.Text
+                    </option>
+            }
         </select>
         <span asp-validation-for="ServiceId" class="text-danger"></span>
+    </div>
+
+    <!-- Employee Dropdown -->
+    <div class="col-md-6">
+        <label asp-for="EmployeeId" class="form-label">Employee</label>
+        <select id="employeeDropdown"
+                asp-for="EmployeeId"
+                class="form-select"
+                disabled>
+            <option value="">-- Select a service first --</option>
+        </select>
+        <span asp-validation-for="EmployeeId" class="text-danger"></span>
     </div>
 
     <!-- Date -->
@@ -37,13 +52,48 @@
 
     <!-- Submit -->
     <div class="col-12 mt-3">
-        <button type="submit" class="btn btn-primary">
-            Book Reservation
-        </button>
+        <button type="submit" class="btn btn-primary">Book Reservation</button>
     </div>
-
 </form>
 
 @section Scripts {
         <partial name="_ValidationScriptsPartial" />
+        <script>
+            document.getElementById('serviceDropdown').addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const categoryId = selectedOption.getAttribute('data-category-id');
+                const employeeDropdown = document.getElementById('employeeDropdown');
+
+                employeeDropdown.innerHTML = '<option value="">-- Loading... --</option>';
+                employeeDropdown.disabled = true;
+
+                if (!categoryId) {
+                    employeeDropdown.innerHTML = '<option value="">-- Select a service first --</option>';
+                    return;
+                }
+
+                        fetch(`/Reservations/GetEmployeesByServiceCategory?categoryId=${categoryId}`)
+        .then(response => response.json())
+        .then(employees => {
+            employeeDropdown.innerHTML = '<option value="">-- Select an employee --</option>';
+
+            if (employees.length === 0) {
+                employeeDropdown.innerHTML = '<option value="">-- No employees available --</option>';
+                return;
+            }
+
+            employees.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.id;
+                option.textContent = emp.name;
+                employeeDropdown.appendChild(option);
+            });
+
+            employeeDropdown.disabled = false;
+        })
+        .catch(() => {
+            employeeDropdown.innerHTML = '<option value="">-- Error loading employees --</option>';
+        });
+            });
+        </script>
 }

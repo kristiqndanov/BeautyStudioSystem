@@ -18,5 +18,7 @@ namespace BeautyStudioSystem.Data.Models
 
         public ICollection<Service> Services { get; set; } = new List<Service>();
 
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+
     }
 }

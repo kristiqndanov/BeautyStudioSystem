@@ -13,11 +13,14 @@ namespace BeautyStudioSystem.Data.Seed
             var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
             await SeedRolesAsync(roleManager);
+
             await SeedAdminAsync(userManager, services.GetRequiredService<IClientsRepository>());
+
             await SeedClientsAsync(userManager, services.GetRequiredService<IClientsRepository>());
-            await SeedEmployeesAsync(userManager, services.GetRequiredService<IEmployeeRepository>());
             await SeedServiceCategoriesAsync(services.GetRequiredService<IServiceCategoryRepository>());
+            await SeedEmployeesAsync(userManager, services.GetRequiredService<IEmployeeRepository>(), services.GetRequiredService<IServiceCategoryRepository>());
             await SeedServicesAsync(services.GetRequiredService<IServicesRepository>(), services.GetRequiredService<IServiceCategoryRepository>());
+
             await SeedReservationsAsync(
                 services.GetRequiredService<IReservationsRepository>(),
                 services.GetRequiredService<IClientsRepository>(),
@@ -109,13 +112,21 @@ namespace BeautyStudioSystem.Data.Seed
             }
         }
 
-        private static async Task SeedEmployeesAsync(UserManager<IdentityUser> userManager, IEmployeeRepository employeeRepository)
+        private static async Task SeedEmployeesAsync(UserManager<IdentityUser> userManager, IEmployeeRepository employeeRepository, IServiceCategoryRepository serviceCategoryRepository)
         {
-            var employeesData = new List<(string FirstName, string LastName, string Email, string Phone)>
-            {
-                ("Maria", "Todorova", "maria.todorova@beautystudio.com", "0888111222"),
-                ("Elena", "Georgieva", "elena.georgieva@beautystudio.com", "0888333444")
-            };
+            var allCategories = await serviceCategoryRepository.GetAllAsync();
+
+            var hairCategory = allCategories.FirstOrDefault(c => c.Name == "Hair");
+            var nailsCategory = allCategories.FirstOrDefault(c => c.Name == "Nails");
+            var faceCategory = allCategories.FirstOrDefault(c => c.Name == "Face");
+
+            var employeesData = new List<(string FirstName, string LastName, string Email, string Phone, List<ServiceCategory> ServiceCategory)>
+                          {
+                            ("Maria", "Todorova", "maria.todorova@beautystudio.com", "0888111222",
+                            new List<ServiceCategory> { hairCategory, faceCategory }.Where(c => c != null).ToList()),
+                            ("Elena", "Georgieva", "elena.georgieva@beautystudio.com", "0888333444",
+                            new List<ServiceCategory> { nailsCategory }.Where(c => c != null).ToList())
+                          };
 
             foreach (var e in employeesData)
             {
@@ -139,9 +150,10 @@ namespace BeautyStudioSystem.Data.Seed
                     {
                         FirstName = e.FirstName,
                         LastName = e.LastName,
-                        Phone = e.Phone,
                         Email = e.Email,
-                        UserId = user.Id
+                        Phone = e.Phone,
+                        UserId = user.Id,
+                        ServiceCategory = e.ServiceCategory
                     });
                 }
             }

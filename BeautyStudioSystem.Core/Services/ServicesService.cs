@@ -57,7 +57,9 @@ namespace BeautyStudioSystem.Core.Services
                     Id = service.Id,
                     Name = service.Name,
                     Price = service.Price,
-                    Reservations = service.Reservations
+                    Reservations = service.Reservations,
+                    DurationMinutes = service.Duration,
+                    ServiceCategoryId = service.ServiceCategoryId
                 };
 
                 serviceViewModels.Add(serviceViewModel);
@@ -75,7 +77,9 @@ namespace BeautyStudioSystem.Core.Services
                 Id = service.Id,
                 Name = service.Name,
                 Price = service.Price,
-                Reservations = service.Reservations
+                Reservations = service.Reservations,
+                DurationMinutes = service.Duration,
+                ServiceCategoryId = service.ServiceCategoryId
             };
 
             return serviceViewModel;

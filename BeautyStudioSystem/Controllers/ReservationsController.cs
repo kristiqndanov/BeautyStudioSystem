@@ -4,6 +4,7 @@ using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
 
 namespace BeautyStudioSystem.Controllers
 {
@@ -11,11 +12,13 @@ namespace BeautyStudioSystem.Controllers
     {
         private readonly IReservationsService _reservationsService;
         private readonly IServicesService _servicesService;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public ReservationsController(IReservationsService reservationsService, IServicesService servicesService)
+        public ReservationsController(IReservationsService reservationsService, IServicesService servicesService, IEmployeeRepository employeeRepository)
         {
             _reservationsService = reservationsService;
             _servicesService = servicesService;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -35,7 +38,7 @@ namespace BeautyStudioSystem.Controllers
             {
                 return NotFound();
             }
-                
+
 
             await _reservationsService.DeleteReservation(id);
 
@@ -67,6 +70,8 @@ namespace BeautyStudioSystem.Controllers
                 })
                 .ToList();
 
+            ViewBag.ServiceCategories = services.ToDictionary(s => s.Id.ToString(), s => s.ServiceCategoryId.ToString());
+
             return View();
         }
 
@@ -83,6 +88,8 @@ namespace BeautyStudioSystem.Controllers
                     Text = s.Name
                 })
                 .ToList();
+
+            ViewBag.ServiceCategories = services.ToDictionary(s => s.Id.ToString(), s => s.ServiceCategoryId.ToString());
 
             if (!ModelState.IsValid)
             {
@@ -101,7 +108,7 @@ namespace BeautyStudioSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return View();
@@ -109,5 +116,19 @@ namespace BeautyStudioSystem.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetEmployeesByServiceCategory(int categoryId)
+        {
+            var employees = await _employeeRepository.GetEmployeesByCategoryAsync(categoryId);
+
+            var jsonEmployees = employees.Select(e => new
+            {
+                Id = e.Id,
+                name = $"{e.FirstName} {e.LastName}"
+            });
+
+            return Json(jsonEmployees);
+
+        }
     }
 }

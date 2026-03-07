@@ -18,6 +18,10 @@ namespace BeautyStudioSystem.Core.ViewModels
         [Precision(18, 2)]
         public decimal Price { get; set; }
 
+        public int ServiceCategoryId { get; set; }
+
+        public int DurationMinutes { get; set; }
+
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

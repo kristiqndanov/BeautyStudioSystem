@@ -44,6 +44,14 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
             return _dbContext.Employees.SingleOrDefault(e => e.UserId == userId);
         }
 
+        public async Task<IEnumerable<Employee>> GetEmployeesByCategoryAsync(int categoryId)
+        {
+            return await _dbContext.Employees
+                .Include(e => e.ServiceCategory)
+                .Where(e => e.ServiceCategory.Any(c => c.Id == categoryId))
+                .ToListAsync();
+        }
+
         public async Task<bool> IsEmployeeAvailableAsync(int employeeId, DateTime date, DateTime startTime, DateTime endTime)
         {
             return !await _dbContext.Reservations.AnyAsync(r =>

@@ -35,5 +35,7 @@ namespace BeautyStudioSystem.Data.Models
         public IdentityUser? User { get; set; }
 
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+        public ICollection<ServiceCategory> ServiceCategory { get; set; } = new List<ServiceCategory>();
     }
 }
