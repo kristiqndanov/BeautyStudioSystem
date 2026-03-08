@@ -1,17 +1,21 @@
 ﻿using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Core.ViewModels;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BeautyStudioSystem.Controllers
 {
     public class ServicesController : ControllerBase
     {
         private readonly IServicesService _servicesService;
+        private readonly IServiceCategoryRepository _serviceCategoryRepository;
 
-        public ServicesController(IServicesService servicesService)
+        public ServicesController(IServicesService servicesService, IServiceCategoryRepository serviceCategoryRepository)
         {
             _servicesService = servicesService;
+            _serviceCategoryRepository = serviceCategoryRepository;
         }
 
         [AllowAnonymous]
@@ -35,6 +39,8 @@ namespace BeautyStudioSystem.Controllers
         public async Task<IActionResult> EditService(int id)
         {
             var serviceViewModel = await _servicesService.GetServiceAsync(id);
+            var categories = await _serviceCategoryRepository.GetAllAsync();
+            ViewBag.Categories = categories.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
 
             return View(serviceViewModel);
         }
@@ -43,6 +49,7 @@ namespace BeautyStudioSystem.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditService(ServiceViewModel serviceViewModel)
         {
+
             if (!ModelState.IsValid)
             {
                 return View(serviceViewModel);
@@ -73,6 +80,8 @@ namespace BeautyStudioSystem.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddService()
         {
+            var categories = await _serviceCategoryRepository.GetAllAsync();
+            ViewBag.Categories = categories.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
             return View();
         }
 
@@ -80,6 +89,9 @@ namespace BeautyStudioSystem.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddService(ServiceViewModel serviceViewModel)
         {
+            var categories = await _serviceCategoryRepository.GetAllAsync();
+            ViewBag.Categories = categories.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
+
             if (!ModelState.IsValid)
             {
                 return View(serviceViewModel);

@@ -33,7 +33,9 @@ namespace BeautyStudioSystem.Core.Services
             {
                 Name = serviceViewModel.Name,
                 Price = serviceViewModel.Price,
-                Reservations = serviceViewModel.Reservations
+                Reservations = serviceViewModel.Reservations,
+                Duration = serviceViewModel.DurationMinutes,
+                ServiceCategoryId = serviceViewModel.ServiceCategoryId
             };
 
             await _servicesRepo.AddServiceAsync(service);
@@ -102,7 +104,9 @@ namespace BeautyStudioSystem.Core.Services
                 Id = serviceViewModel.Id,
                 Name = serviceViewModel.Name,
                 Price = serviceViewModel.Price,
-                Reservations = serviceViewModel.Reservations
+                Reservations = serviceViewModel.Reservations,
+                Duration = serviceViewModel.DurationMinutes,
+                ServiceCategoryId = serviceViewModel.ServiceCategoryId
             };
 
             await _servicesRepo.UpdateServiceAsync(service);

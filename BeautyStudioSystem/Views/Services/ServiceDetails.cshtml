@@ -1,7 +1,7 @@
 ﻿<div class="card shadow text-white"
      style="
         background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-        url('@Url.Content($"~/images/services/{Model.Id}.png")');
+        url('@Url.Content($"~/images/services/{Model.ServiceCategoryId}.png")');
         background-size: cover;
         background-position: center;
         min-height: 350px;
@@ -11,6 +11,10 @@
 
         <p class="fs-4 mb-3">
             <strong>Price:</strong> @Model.Price.ToString("C")
+        </p>
+
+        <p class="fs-5 mb-3">
+            <strong>Duration:</strong> @Model.DurationMinutes min
         </p>
 
     
