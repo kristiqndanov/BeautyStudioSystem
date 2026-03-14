@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeautyStudioSystem.Core.Services
 
@@ -138,6 +139,42 @@ namespace BeautyStudioSystem.Core.Services
                 reservationViewModels.Add(reservationViewModel);
             }
              return reservationViewModels;
+        }
+
+        public async Task<PaginatedResult<ClientViewModel>> GetClientsPagedAsync(string? search, int page, int pageSize)
+        {
+            var query = _repo.GetAllClientsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(c =>
+                    (c.FirstName + " " + c.LastName).Contains(search) ||
+                    c.Email.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var clients = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var clientViewModels = clients.Select(c => new ClientViewModel
+            {
+                Id = c.Id,
+                FullName = $"{c.FirstName} {c.LastName}",
+                Phone = c.Phone,
+                Email = c.Email,
+                UserId = c.UserId
+            });
+
+            return new PaginatedResult<ClientViewModel>
+            {
+                Items = clientViewModels,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
 
         public async Task<IEnumerable<ClientViewModel>> SearchClientsAsync(string search)

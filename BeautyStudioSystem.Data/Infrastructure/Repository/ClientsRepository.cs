@@ -78,5 +78,13 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
             }
             
         }
+
+        public IQueryable<Client> GetAllClientsQueryable()
+        {
+            return _dbContext.Clients
+                .OrderBy(c => c.FirstName)
+                .ThenBy(c => c.LastName)
+                .AsQueryable();
+        }
     }
 }

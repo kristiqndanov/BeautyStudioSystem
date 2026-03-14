@@ -67,3 +67,21 @@ h1, h2, h3, .navbar-brand {
     background-color: #198754;
     color: white;
 }
+
+.page-link {
+    color: #198754;
+}
+
+    .page-link:hover {
+        color: #157347;
+    }
+
+.page-item.active .page-link {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+}

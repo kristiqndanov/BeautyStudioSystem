@@ -22,5 +22,7 @@ namespace BeautyStudioSystem.Core.Services.Contracts
 
         public Task SoftDeleteClientAsync(int id);
 
+        public Task<PaginatedResult<ClientViewModel>> GetClientsPagedAsync(string? search, int page, int pageSize);
+
     }
 }

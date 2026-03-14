@@ -18,5 +18,7 @@ namespace BeautyStudioSystem.Data.Infrastructure.Contracts
 
         public Task<Client> GetClientByUserId(string userId);
 
+        public IQueryable<Client> GetAllClientsQueryable();
+
     }
 }

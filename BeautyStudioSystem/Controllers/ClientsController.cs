@@ -26,38 +26,12 @@ namespace BeautyStudioSystem.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search, int page = 1)
         {
-            var clientsViewModels = await _clientsService.GetAllClientsAsync();
-            return View(clientsViewModels);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index(string search)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
-            try
-            {
-                var clientsViewModels = await _clientsService.SearchClientsAsync(search);
-
-                if (!clientsViewModels.Any())
-                {
-                    ViewBag.Message = "No clients found.";
-                }
-
-                return View(clientsViewModels);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return View();
-            }
-
+            int pageSize = 20;
+            var result = await _clientsService.GetClientsPagedAsync(search, page, pageSize);
+            ViewBag.Search = search;
+            return View(result);
         }
 
         [Authorize(Roles = "Admin")]
