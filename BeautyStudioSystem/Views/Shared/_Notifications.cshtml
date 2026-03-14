@@ -1,0 +1,12 @@
+﻿@if (TempData["Message"] != null)
+{
+    <text>toastr.success("@TempData["Message"]");</text>
+}
+@if (TempData["Error"] != null)
+{
+    <text>toastr.error("@TempData["Error"]");</text>
+}
+@if (TempData["Warning"] != null)
+{
+    <text>toastr.warning("@TempData["Warning"]");</text>
+}
