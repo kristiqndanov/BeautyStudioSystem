@@ -34,7 +34,7 @@ namespace BeautyStudioSystem.Data
                 .HasForeignKey(r => r.ServiceId);
 
             modelBuilder.Entity<Reservation>()
-                .HasIndex(r => new { r.ServiceId, r.Date, r.StartTime })
+                .HasIndex(r => new { r.EmployeeId, r.Date, r.StartTime })
                 .IsUnique();
 
 
