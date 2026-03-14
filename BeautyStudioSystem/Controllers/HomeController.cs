@@ -34,6 +34,18 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [AllowAnonymous]
+        public IActionResult Error404()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Error500()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
         public IActionResult Contacts()
         {
             return View();

@@ -65,6 +65,8 @@ namespace BeautyStudioSystem
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithReExecute("/Home/Error{0}");
+            app.UseExceptionHandler("/Home/Error500");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
