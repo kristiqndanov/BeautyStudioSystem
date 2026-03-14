@@ -26,6 +26,8 @@ namespace BeautyStudioSystem.Core.ViewModels
         public string Phone { get; set; } = null!;
 
         public string? UserId { get; set; }
+        
+        public string? CurrentRole { get; set; }
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

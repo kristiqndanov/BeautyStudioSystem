@@ -74,7 +74,8 @@ namespace BeautyStudioSystem.Core.Services
                 Id = c.Id,
                 FullName = $"{c.FirstName} {c.LastName}",
                 Phone = c.Phone,
-                Email = c.Email
+                Email = c.Email,
+                UserId = c.UserId
             })
             .ToList();
         }
@@ -93,7 +94,8 @@ namespace BeautyStudioSystem.Core.Services
                 Id = client.Id,
                 FullName = $"{client.FirstName} {client.LastName}",
                 Phone = client.Phone,
-                Email = client.Email
+                Email = client.Email,
+                UserId = client.UserId
             };
 
             return clientViewModel;
@@ -148,7 +150,7 @@ namespace BeautyStudioSystem.Core.Services
                 Id = c.Id,
                 FullName = $"{c.FirstName} {c.LastName}",
                 Email = c.Email,
-                Phone = c.Phone
+                Phone = c.Phone,
             }).ToList();
 
             if (string.IsNullOrEmpty(search))
@@ -175,6 +177,15 @@ namespace BeautyStudioSystem.Core.Services
                 }
 
             
+        }
+
+        public async Task SoftDeleteClientAsync(int id)
+        {
+            var client = await _repo.GetClientByIdAsync(id);
+            if (client != null)
+            {
+                await _repo.DeleteClient(id);
+            }
         }
 
         public async Task UpdateClientAsync(ClientViewModel clientViewModel)

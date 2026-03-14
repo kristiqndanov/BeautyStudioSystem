@@ -14,12 +14,14 @@ namespace BeautyStudioSystem.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientsService _clientsService;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ClientsController(IClientsService clientsService, UserManager<IdentityUser> userManager)
+        public ClientsController(IClientsService clientsService, IEmployeeRepository employeeRepository, UserManager<IdentityUser> userManager)
         {
             this._clientsService = clientsService;
             this._userManager = userManager;
+            this._employeeRepository = employeeRepository;
         }
 
         [HttpGet]
@@ -110,6 +112,16 @@ namespace BeautyStudioSystem.Controllers
                 return NotFound();
             }
 
+            if (!string.IsNullOrEmpty(client.UserId))
+            {
+                var user = await _userManager.FindByIdAsync(client.UserId);
+                if (user != null)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    client.CurrentRole = roles.FirstOrDefault() ?? "Client";
+                }
+            }
+
             return View(client);
         }
 
@@ -124,6 +136,36 @@ namespace BeautyStudioSystem.Controllers
 
             await _clientsService.UpdateClientAsync(clientViewModel);
             TempData["Message"] = "Client updated successfully.";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PromoteToEmployee(ClientViewModel clientViewModel)
+        {
+            var user = await _userManager.FindByIdAsync(clientViewModel.UserId);
+            if (user == null)
+            {
+                TempData["Error"] = "User not found.";
+                return RedirectToAction("Index");
+            }
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            await _userManager.AddToRoleAsync(user, "Employee");
+
+            var names = clientViewModel.FullName.Split(' ', 2);
+            await _employeeRepository.AddEmployeeAsync(new Employee
+            {
+                FirstName = names[0],
+                LastName = names.Length > 1 ? names[1] : string.Empty,
+                Email = clientViewModel.Email,
+                Phone = clientViewModel.Phone,
+                UserId = clientViewModel.UserId
+            });
+
+            await _clientsService.SoftDeleteClientAsync(clientViewModel.Id);
+            TempData["Message"] = $"{clientViewModel.FullName} is now an Employee.";
             return RedirectToAction("Index");
         }
 

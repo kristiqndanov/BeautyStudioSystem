@@ -36,7 +36,10 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
 
         public async Task<Employee> GetByIdAsync(int id)
         {
-            return await _dbContext.Employees.SingleOrDefaultAsync(e => e.Id == id);
+            return await _dbContext.Employees
+                .Include(e => e.Reservations)
+                .Include(e => e.ServiceCategory)
+                .SingleOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<Employee> GetByUserIdAsync(string userId)

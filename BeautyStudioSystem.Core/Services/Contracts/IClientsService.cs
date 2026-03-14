@@ -20,5 +20,7 @@ namespace BeautyStudioSystem.Core.Services.Contracts
 
         public Task<int> GetClientIdByUserId(string id);
 
+        public Task SoftDeleteClientAsync(int id);
+
     }
 }

@@ -1,0 +1,60 @@
+﻿@using BeautyStudioSystem.Core.ViewModels
+@model IEnumerable<EmployeeViewModel>
+@{
+    ViewData["Title"] = "Employees";
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">Employees</h1>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-success-header">
+            <tr>
+                <th scope="col">Full Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Reservations</th>
+                <th scope="col" class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                    <tr>
+                        <td colspan="5" class="text-center py-4">No employees found.</td>
+                    </tr>
+            }
+            else
+            {
+                foreach (var employee in Model)
+                {
+                            <tr>
+                                <td>@employee.FullName</td>
+                                <td>@employee.Email</td>
+                                <td>@employee.Phone</td>
+                                <td>
+                                    <a asp-controller="Employee"
+                                       asp-action="EmployeeReservations"
+                                       asp-route-id="@employee.Id"
+                                       class="text-decoration-none">See reservations</a>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-sm btn-outline-primary"
+                                           asp-action="EditEmployee"
+                                           asp-route-id="@employee.Id">Edit</a>
+                                        <form asp-action="DeleteEmployee"
+                                              asp-route-id="@employee.Id"
+                                              method="post"
+                                              class="d-inline ms-1"
+                                              onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

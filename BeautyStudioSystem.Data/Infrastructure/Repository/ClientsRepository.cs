@@ -9,6 +9,7 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
     public class ClientsRepository : IClientsRepository
     {
         private ApplicationDbContext _dbContext;
+        
 
         public ClientsRepository(ApplicationDbContext dbContext)
         {
@@ -58,20 +59,9 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
 
         public async Task<Client> GetClientByNameAsync(string name)
         {
-            var fullNames = await _dbContext.Clients
-            .Select(c => c.FirstName + " " + c.LastName)
-            .ToListAsync();
+            return await _dbContext.Clients
+           .SingleOrDefaultAsync(c => c.FirstName + " " + c.LastName == name);
 
-            if (fullNames.Contains(name))
-            {
-                return await _dbContext.Clients.SingleOrDefaultAsync(c => c.FirstName + " " + c.LastName == name);
-            }
-          
-            else
-            {
-                return null;
-            }
-            
         }
 
         public async Task<Client> GetClientByUserId(string userId)
