@@ -150,7 +150,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (employee == null)
             {
-                throw new Exception(InputValidations.EmployeeNotFoundMessage);
+                throw new ArgumentException(InputValidations.EmployeeNotFoundMessage);
             }
 
             var allReservations = await _reservationsRepository.GetAllAsync();

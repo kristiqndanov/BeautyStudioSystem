@@ -271,5 +271,85 @@ namespace BeautyStudioSystem.Tests
             Assert.AreEqual("Anna Vasileva", resultList[0].ClientName);
             Assert.AreEqual("Haircut", resultList[0].ServiceName);
         }
+
+        [Test]
+        public async Task GetReservationAsync_ShouldThrowArgumentException_WhenReservationIsNull()
+        {
+            _reservationsRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
+                .ReturnsAsync((Reservation)null);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await _reservationsService.GetReservationAsync(1));
+        }
+
+        [Test]
+
+        public async Task GetReservationAsync_ShouldReturnValid_WhenReservationExists()
+        {
+            var reservation = new Reservation
+            {
+                Id = 1,
+                Client = new Client { FirstName = "Anna", LastName = "Vasileva" },
+                Service = new Service { Name = "Haircut" },
+                Employee = new Employee { FirstName = "Maria", LastName = "Todorova" },
+                Date = DateTime.Now.AddDays(1),
+                StartTime = DateTime.Now.AddDays(1).AddHours(10),
+                EndTime = DateTime.Now.AddDays(1).AddHours(11)
+
+            };
+
+            _reservationsRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
+                .ReturnsAsync(reservation);
+
+            var result = await _reservationsService.GetReservationAsync(1);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Maria Todorova", result.EmployeeName);
+            Assert.AreEqual("Anna Vasileva", result.ClientName);
+            Assert.AreEqual("Haircut", result.ServiceName);
+        }
+
+        [Test]
+        public async Task GetReservationsByEmployeeAsync_ShouldThrowException_WhenEmployeeIsNull()
+        {
+            _employeeRepositoryMock.Setup(repo => repo.GetByUserIdAsync("user-id"))
+                .ReturnsAsync((Employee)null);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await _reservationsService.GetReservationsByEmployeeAsync("user-id"));
+
+            _employeeRepositoryMock.Verify(repo => repo.GetByUserIdAsync("user-id"), Times.Once);
+        }
+
+        [Test]
+        public async Task GetReservationsByEmployeeAsync_ShouldReturnValid()
+        {
+         
+            var employee = new Employee { Id = 1, UserId = "user-id", FirstName = "Maria", LastName = "Todorova" };
+            var reservations = new List<Reservation>
+            {
+                new Reservation
+                {
+                    Id = 1,
+                    EmployeeId = 1,
+                    Client = new Client { FirstName = "Anna", LastName = "Vasileva" },
+                    Service = new Service { Name = "Haircut" },
+                    Employee = employee,
+                    Date = DateTime.Now.AddDays(1),
+                    StartTime = DateTime.Now.AddDays(1).AddHours(10),
+                    EndTime = DateTime.Now.AddDays(1).AddHours(11)
+                }
+            };
+
+           _employeeRepositoryMock.Setup(repo => repo.GetByUserIdAsync("user-id")).ReturnsAsync(employee);
+
+            _reservationsRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(reservations);
+
+            var result = await _reservationsService.GetReservationsByEmployeeAsync("user-id");
+            var resultList = result.ToList();
+
+            Assert.AreEqual(1, resultList.Count);
+            Assert.AreEqual("Maria Todorova", resultList[0].EmployeeName);
+            Assert.AreEqual("Anna Vasileva", resultList[0].ClientName);
+            Assert.AreEqual("Haircut", resultList[0].ServiceName);
+        }
     }
 }
