@@ -72,6 +72,11 @@ namespace BeautyStudioSystem.Core.Services
         {
            var service = await _servicesRepo.GetByIdAsync(id);
 
+            if (service == null)
+            {
+                throw new ArgumentException($"Service with id {id} not found.");
+            }
+
             var serviceViewModel = new ServiceViewModel
             {
                 Id = service.Id,

@@ -111,5 +111,37 @@ namespace BeautyStudioSystem.Tests
             Assert.AreEqual("Haircut", result.First().Name);
 
         }
+
+        [Test]
+        public async Task GetServiceAsync_ShouldReturnServiceViewModel()
+        {
+            int serviceId = 1;
+            var service = new Service
+            {
+                Id = serviceId,
+                Name = "Haircut",
+                Price = 40.00m,
+                Duration = 60,
+                ServiceCategoryId = 1
+            };
+
+            _servicesRepositoryMock.Setup(repo => repo.GetByIdAsync(serviceId)).ReturnsAsync(service);
+
+            var result = await _servicesService.GetServiceAsync(serviceId);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Haircut", result.Name);
+        }
+
+        [Test]
+        public async Task GetServiceAsync_ShouldThrowArgumentException_WhenServiceNotFound()
+        {
+            int serviceId = 1;
+
+            _servicesRepositoryMock.Setup(repo => repo.GetByIdAsync(serviceId)).ReturnsAsync((Service)null);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await _servicesService.GetServiceAsync(serviceId));
+
+        }
     }
 }
