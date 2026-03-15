@@ -75,5 +75,41 @@ namespace BeautyStudioSystem.Tests
 
             _servicesRepositoryMock.Verify(repo => repo.DeleteServiceAsync(service), Times.Once);
         }
+
+        [Test]
+        public async Task GetAllServicesAsync_ShouldReturnEmptyList_WhenServicesAreEmpty()
+        {
+            _servicesRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(new List<Service>());
+
+            var result = await _servicesService.GetAllServicesAsync();
+
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public async Task GetAllServicesAsync_ShouldReturnValidList()
+        {
+            var services = new List<Service>();
+
+            var service = new Service
+            {
+                Id = 1,
+                Name = "Haircut",
+                Price = 40.00m,
+                Duration = 60,
+                ServiceCategoryId = 1
+            };
+
+            services.Add(service);
+
+            _servicesRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(services);
+
+            var result = await _servicesService.GetAllServicesAsync();
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("Haircut", result.First().Name);
+
+        }
     }
 }
