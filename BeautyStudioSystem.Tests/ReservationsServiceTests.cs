@@ -230,6 +230,46 @@ namespace BeautyStudioSystem.Tests
             await _reservationsService.DeleteReservation(1);
         }
 
+        [Test]
+        public async Task GetAllReservationsAsync_ShouldReturnEmptyListWhenNoReservations()
+        {
+            _reservationsRepositoryMock.Setup(repo => repo.GetAllAsync())
+                .ReturnsAsync(new List<Reservation>());
 
+            var result = await _reservationsService.GetAllReservationsAsync();
+
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public async Task GetAllReservationsAsync_ShouldReturnValid_WhenAListIsPopulated()
+        {
+            var reservations = new List<Reservation>();
+            var reservation = new Reservation
+            {
+                Id = 1,
+                Client = new Client { FirstName = "Anna", LastName = "Vasileva" },
+                Service = new Service { Name = "Haircut" },
+                Employee = new Employee { FirstName = "Maria", LastName = "Todorova" },
+                Date = DateTime.Now.AddDays(1),
+                StartTime = DateTime.Now.AddDays(1).AddHours(10),
+                EndTime = DateTime.Now.AddDays(1).AddHours(11)
+
+            };
+
+            reservations.Add(reservation);
+
+            _reservationsRepositoryMock.Setup(repo => repo.GetAllAsync())
+                .ReturnsAsync(reservations);
+
+            var result = await _reservationsService.GetAllReservationsAsync();
+            var resultList = result.ToList();
+
+            Assert.AreEqual(1, resultList.Count);
+            Assert.AreEqual("Maria Todorova", resultList[0].EmployeeName);
+            Assert.AreEqual("Anna Vasileva", resultList[0].ClientName);
+            Assert.AreEqual("Haircut", resultList[0].ServiceName);
+        }
     }
 }
