@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautyStudioSystem.Tests", "BeautyStudioSystem.Tests\BeautyStudioSystem.Tests.csproj", "{21DE1588-61CA-4025-91CF-8C9DB28974D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{720F7989-B186-46BC-8AD5-583D34CCC7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{720F7989-B186-46BC-8AD5-583D34CCC7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{720F7989-B186-46BC-8AD5-583D34CCC7FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21DE1588-61CA-4025-91CF-8C9DB28974D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21DE1588-61CA-4025-91CF-8C9DB28974D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21DE1588-61CA-4025-91CF-8C9DB28974D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21DE1588-61CA-4025-91CF-8C9DB28974D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
