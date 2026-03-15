@@ -1,0 +1,66 @@
+﻿using BeautyStudioSystem.Core.Services;
+using BeautyStudioSystem.Data.Infrastructure.Contracts;
+using Moq;
+using BeautyStudioSystem.Core.ViewModels;
+using BeautyStudioSystem.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BeautyStudioSystem.Tests
+{
+    public class ServicesServiceTests
+    {
+        private Mock<IServicesRepository> _servicesRepositoryMock;
+        private ServicesService _servicesService;
+
+        [SetUp]
+        public void Setup()
+        {
+            _servicesRepositoryMock = new Mock<IServicesRepository>();
+            _servicesService = new ServicesService(_servicesRepositoryMock.Object);
+        }
+
+        [Test]
+        public async Task AddServiceAsync_ShouldThrowArgumentNullException_WhenServiceViewModelIsNull()
+        {
+            
+            ServiceViewModel serviceViewModel = null;
+
+            
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _servicesService.AddServiceAsync(serviceViewModel));
+        }
+
+        [Test]
+        public async Task AddServiceAsync_ShouldThrowException_WhenPriceIsNegative()
+        {
+            var serviceViewModel = new ServiceViewModel
+            {
+                Name = "Test Service",
+                Price = -10
+            };
+
+            Assert.ThrowsAsync<Exception>(async () => await _servicesService.AddServiceAsync(serviceViewModel));
+        }
+
+        [Test]
+        public async Task AddServiceAsync_WhenAllValid_ShouldAddService()
+        {
+            
+            var serviceViewModel = new ServiceViewModel
+            {
+                Name = "Haircut",
+                Price = 40.00m,
+                DurationMinutes = 60,
+                ServiceCategoryId = 1
+            };
+
+            
+            await _servicesService.AddServiceAsync(serviceViewModel);
+
+            _servicesRepositoryMock.Verify(repo => repo.AddServiceAsync(It.IsAny<Service>()), Times.Once);
+        }
+    }
+}

@@ -1,9 +1,4 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using BeautyStudioSystem.Core.Services;
 using BeautyStudioSystem.Core.ViewModels;
