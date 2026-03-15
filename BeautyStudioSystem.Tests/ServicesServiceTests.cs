@@ -143,5 +143,44 @@ namespace BeautyStudioSystem.Tests
             Assert.ThrowsAsync<ArgumentException>(async () => await _servicesService.GetServiceAsync(serviceId));
 
         }
+
+        [Test]
+        public async Task UpdateServiceAsync_ShouldThrowArgumentNullException_WhenServiceViewModelIsNull()
+        {
+            ServiceViewModel serviceViewModel = null;
+
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _servicesService.UpdateServiceAsync(serviceViewModel));
+        }
+
+        [Test]
+        public async Task UpdateServiceAsync_ShouldThrowException_WhenPriceIsNegative()
+        {
+            var serviceViewModel = new ServiceViewModel
+            {
+                Id = 1,
+                Name = "Test Service",
+                Price = -10
+            };
+
+            Assert.ThrowsAsync<Exception>(async () => await _servicesService.UpdateServiceAsync(serviceViewModel));
+        }
+
+        [Test]
+
+        public async Task UpdateServiceAsync_ShouldUpdate_IfAllIsValid()
+        {
+            var serviceViewModel = new ServiceViewModel
+            {
+                Id = 1,
+                Name = "Test Service",
+                Price = 40,
+                DurationMinutes = 60,
+                ServiceCategoryId = 1
+            };
+
+            await _servicesService.UpdateServiceAsync(serviceViewModel);
+
+            _servicesRepositoryMock.Verify(repo => repo.UpdateServiceAsync(It.IsAny<Service>()), Times.Once);
+        }
     }
 }
