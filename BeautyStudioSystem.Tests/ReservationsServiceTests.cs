@@ -207,5 +207,29 @@ namespace BeautyStudioSystem.Tests
             _reservationsRepositoryMock.Verify(repo => repo.AddReservationAsync(It.IsAny<Reservation>()), Times.Once);
 
         }
+
+        [Test]
+        public async Task DeleteReservation_WhenReservationDoesNotExist_ShouldThrowArgumentException()
+        {
+            _reservationsRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
+                .ReturnsAsync((Reservation)null);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await _reservationsService.DeleteReservation(1));
+
+            _reservationsRepositoryMock.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+        }
+
+        [Test]
+        public async Task DeleteReservation_WhenReservationExists_ShouldDeleteReservation()
+        {
+            var reservation = new Reservation { Id = 1 };
+
+            _reservationsRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
+                .ReturnsAsync(reservation);
+
+            await _reservationsService.DeleteReservation(1);
+        }
+
+
     }
 }
