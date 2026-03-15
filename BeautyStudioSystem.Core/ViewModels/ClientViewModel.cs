@@ -11,17 +11,17 @@ namespace BeautyStudioSystem.Core.ViewModels
         public int Id { get; set; }
 
         [Required]
-        [StringLength(InputValidations.FullNameMaxLength), MinLength(InputValidations.FullNameMinLength, ErrorMessage = "Full name must have at least 1 letter for first name and at least 1 letter for last name")]
-        [RegularExpression(@"^[a-zA-Z]+ [a-zA-Z]+$", ErrorMessage = "Full Name must contain first name and last name separated by a space.")]
+        [StringLength(InputValidations.FullNameMaxLength), MinLength(InputValidations.FullNameMinLength, ErrorMessage = InputValidations.FullNameErrorMessage)]
+        [RegularExpression(@"^[a-zA-Z]+ [a-zA-Z]+$", ErrorMessage = InputValidations.FullNameContainsTwoWordsMessage)]
         public string FullName { get; set; } = null!;
 
         [Required]
         [MaxLength(InputValidations.EmailMaxLength)]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [EmailAddress(ErrorMessage = InputValidations.InvalidEmailMessage)]
         public string Email { get; set; } = null!;
 
         [Required]
-        [StringLength(InputValidations.PhoneLength), MinLength(InputValidations.PhoneLength ,ErrorMessage = "Phone number must be exactly 10 digits")]
+        [StringLength(InputValidations.PhoneLength), MinLength(InputValidations.PhoneLength ,ErrorMessage = InputValidations.PhoneNumberErrorMessage)]
         
         public string Phone { get; set; } = null!;
 

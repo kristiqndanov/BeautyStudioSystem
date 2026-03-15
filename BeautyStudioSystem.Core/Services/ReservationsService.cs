@@ -2,9 +2,7 @@
 using BeautyStudioSystem.Core.ViewModels;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using BeautyStudioSystem.Data.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Text.RegularExpressions;
-using System.ComponentModel.DataAnnotations;
+using BeautyStudioSystem.Core.Common;
 
 namespace BeautyStudioSystem.Core.Services
 {
@@ -27,26 +25,26 @@ namespace BeautyStudioSystem.Core.Services
         {
             if (!DateTime.TryParse(reservationFormModel.Date, out DateTime date))
             {
-                throw new ArgumentException("Invalid date.");
+                throw new ArgumentException(InputValidations.InvalidDateMessage);
             }
 
             if (!TimeSpan.TryParse(reservationFormModel.StartTime, out TimeSpan startTime))
             {
-                throw new ArgumentException("Invalid start time.");
+                throw new ArgumentException(InputValidations.InvalidStartTimeMessage);
             }
 
             DateTime reservationStartDateTime = date.Date + startTime;
 
             if (reservationStartDateTime < DateTime.Now)
             {
-                throw new ArgumentException("Reservation date and time cannot be in the past.");
+                throw new ArgumentException(InputValidations.ReservationInPastMessage);
             }
 
             var service = await _servicesRepository.GetByIdAsync(reservationFormModel.ServiceId);
 
             if (service == null)
             {
-                throw new ArgumentException("Selected service does not exist.");
+                throw new ArgumentException(InputValidations.ServiceDoesNotExistMessage);
             }
 
             DateTime reservationEndDateTime = reservationStartDateTime.AddMinutes(service.Duration);
@@ -59,7 +57,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (!isEmployeeAvailable)
             {
-                throw new InvalidOperationException("Another reservation is already booked for this employee at the same time.");
+                throw new InvalidOperationException(InputValidations.ReservationDuplicateMessage);
             }
 
             var client = await _clientsRepository.GetClientByUserId(userId);
@@ -67,7 +65,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (client == null)
             {
-                throw new Exception("Your account doesn't exist on the database.");
+                throw new Exception(InputValidations.ClientNotFoundMessage);
             }
 
            
@@ -91,7 +89,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (reservation == null)
             {
-                throw new ArgumentException("Reservation not found.");
+                throw new ArgumentException(InputValidations.ReservationNotFoundMessage);
             }
 
             await _reservationsRepository.DeleteReservation(reservation);
@@ -128,7 +126,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (reservation == null)
             {
-                throw new ArgumentException("Reservation not found.");
+                throw new ArgumentException(InputValidations.ReservationNotFoundMessage);
             }
 
             var reservationViewModel = new ReservationViewModel
@@ -152,7 +150,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (employee == null)
             {
-                throw new Exception("Employee doesn't exist.");
+                throw new Exception(InputValidations.EmployeeNotFoundMessage);
             }
 
             var allReservations = await _reservationsRepository.GetAllAsync();

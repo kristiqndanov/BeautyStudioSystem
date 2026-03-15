@@ -1,7 +1,7 @@
-﻿using BeautyStudioSystem.Core.Services.Contracts;
+﻿using BeautyStudioSystem.Common;
+using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Core.ViewModels;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
-using BeautyStudioSystem.Data.Infrastructure.Repository;
 using BeautyStudioSystem.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -38,7 +38,7 @@ namespace BeautyStudioSystem.Controllers
             var reservations = await _reservationsService.GetReservationsByEmployeeAsync(user.Id);
             if (!reservations.Any())
             {
-                ViewBag.Message = "No reservations found.";
+                ViewBag.Message = ValidationAndErrorMessageConstants.NoReservationsMessage;
             }
             return View(reservations);
         }
@@ -68,7 +68,7 @@ namespace BeautyStudioSystem.Controllers
 
             if (!reservations.Any())
             {
-                ViewBag.Message = "This employee has no reservations.";
+                ViewBag.Message = ValidationAndErrorMessageConstants.EmployeeHasNoReservationsMessage;
             }
 
             ViewBag.EmployeeName = $"{employee.FirstName} {employee.LastName}";
@@ -123,7 +123,7 @@ namespace BeautyStudioSystem.Controllers
                 .ToList();
 
             await _employeeRepository.UpdateEmployee(employee);
-            TempData["Message"] = "Employee updated successfully.";
+            TempData["Message"] = ValidationAndErrorMessageConstants.EmployeeUpdatedMessage;
             return RedirectToAction("AdminIndex");
         }
 
@@ -134,7 +134,7 @@ namespace BeautyStudioSystem.Controllers
             var user = await _userManager.FindByIdAsync(employeeViewModel.UserId);
             if (user == null)
             {
-                TempData["Error"] = "User not found.";
+                TempData["Error"] = ValidationAndErrorMessageConstants.UserNotFoundMessage;
                 return RedirectToAction("AdminIndex");
             }
 
@@ -159,7 +159,7 @@ namespace BeautyStudioSystem.Controllers
                 UserId = employeeViewModel.UserId
             });
 
-            TempData["Message"] = $"{employeeViewModel.FullName} has been reverted to Client.";
+            TempData["Message"] = string.Format(ValidationAndErrorMessageConstants.RevertToClientMessage, employeeViewModel.FullName);
             return RedirectToAction("AdminIndex");
         }
 
@@ -178,7 +178,7 @@ namespace BeautyStudioSystem.Controllers
                 }
             }
 
-            TempData["Message"] = "Employee deleted successfully.";
+            TempData["Message"] = ValidationAndErrorMessageConstants.EmployeeDeletedMessage;
             return RedirectToAction("AdminIndex");
         }
     }

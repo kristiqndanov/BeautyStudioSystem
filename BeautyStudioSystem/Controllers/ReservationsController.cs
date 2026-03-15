@@ -1,10 +1,10 @@
-﻿using BeautyStudioSystem.Data.Models;
-using BeautyStudioSystem.Core.Services.Contracts;
+﻿using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
+using BeautyStudioSystem.Common;
 
 namespace BeautyStudioSystem.Controllers
 {
@@ -42,7 +42,7 @@ namespace BeautyStudioSystem.Controllers
 
             await _reservationsService.DeleteReservation(id);
 
-            TempData["Message"] = "Reservation deleted successfully.";
+            TempData["Message"] = ValidationAndErrorMessageConstants.ReservationDeletedMessage;
 
             if (User.IsInRole("Admin"))
             {
@@ -103,7 +103,7 @@ namespace BeautyStudioSystem.Controllers
 
                 await _reservationsService.AddReservationAsync(reservationViewModel, userId);
 
-                TempData["Message"] = "Reservation created successfully.";
+                TempData["Message"] = ValidationAndErrorMessageConstants.ReservationCreatedMessage;
 
                 return RedirectToAction("Index", "Home");
             }

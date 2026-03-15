@@ -2,9 +2,7 @@
 using BeautyStudioSystem.Core.ViewModels;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using BeautyStudioSystem.Data.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Text.RegularExpressions;
-using System.ComponentModel.DataAnnotations;
+using BeautyStudioSystem.Core.Common;
 
 namespace BeautyStudioSystem.Core.Services
 {
@@ -26,7 +24,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (serviceViewModel.Price <= 0)
             {
-                throw new Exception("Price cannot be negative number");
+                throw new Exception(InputValidations.PriceCannotBeNegativeMessage);
             }
 
             var service = new Service
@@ -96,7 +94,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (serviceViewModel.Price <= 0)
             {
-                throw new Exception("Price cannot be negative number");
+                throw new Exception(InputValidations.PriceCannotBeNegativeMessage);
             }
 
             var service = new Service

@@ -1,5 +1,4 @@
-﻿using BeautyStudioSystem.Data.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BeautyStudioSystem.Core.ViewModels
 {

@@ -1,13 +1,11 @@
 ﻿using BeautyStudioSystem.Data.Models;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
-using BeautyStudioSystem.Data.Infrastructure.Repository;
 using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using BeautyStudioSystem.Common;
 
 namespace BeautyStudioSystem.Controllers
 {
@@ -41,7 +39,7 @@ namespace BeautyStudioSystem.Controllers
 
             if (!reservationViewModels.Any())
             {
-                ViewBag.Message = "Client doesn't have any reservations.";
+                ViewBag.Message = ValidationAndErrorMessageConstants.NoClientReservationsMessage;
             }
 
 
@@ -67,7 +65,7 @@ namespace BeautyStudioSystem.Controllers
             {
                 await _clientsService.DeleteClientAsync(id);
 
-                TempData["Message"] = "Client deleted successfully.";
+                TempData["Message"] = ValidationAndErrorMessageConstants.ClientDeletedMessage;
             }
 
            
@@ -109,7 +107,7 @@ namespace BeautyStudioSystem.Controllers
             }
 
             await _clientsService.UpdateClientAsync(clientViewModel);
-            TempData["Message"] = "Client updated successfully.";
+            TempData["Message"] = ValidationAndErrorMessageConstants.ClientUpdatedMessage;
             return RedirectToAction("Index");
         }
 
@@ -120,7 +118,7 @@ namespace BeautyStudioSystem.Controllers
             var user = await _userManager.FindByIdAsync(clientViewModel.UserId);
             if (user == null)
             {
-                TempData["Error"] = "User not found.";
+                TempData["Error"] = ValidationAndErrorMessageConstants.UserNotFoundMessage;
                 return RedirectToAction("Index");
             }
 
@@ -139,7 +137,7 @@ namespace BeautyStudioSystem.Controllers
             });
 
             await _clientsService.SoftDeleteClientAsync(clientViewModel.Id);
-            TempData["Message"] = $"{clientViewModel.FullName} is now an Employee.";
+            TempData["Message"] = string.Format(ValidationAndErrorMessageConstants.PromoteToEmployeeMessage, clientViewModel.FullName);
             return RedirectToAction("Index");
         }
 
@@ -154,7 +152,7 @@ namespace BeautyStudioSystem.Controllers
 
             if (!reservationViewModels.Any())
             {
-                ViewBag.Message = "You do not have any reservations yet.";
+                ViewBag.Message = ValidationAndErrorMessageConstants.NoCurrentReservationsMessage;
             }
 
             if (reservationViewModels.Any())

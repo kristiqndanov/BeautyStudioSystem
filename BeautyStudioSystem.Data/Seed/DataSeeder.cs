@@ -30,7 +30,7 @@ namespace BeautyStudioSystem.Data.Seed
 
         private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-            var roles = new List<string> { "Admin", "Client", "Employee" };
+            var roles = DataToSeed.Roles;
 
             foreach (var role in roles)
             {
@@ -43,31 +43,29 @@ namespace BeautyStudioSystem.Data.Seed
 
         private static async Task SeedAdminAsync(UserManager<IdentityUser> userManager, IClientsRepository clientsRepository)
         {
-            string adminEmail = "admin@admin.com";
-            string adminPassword = "Admin123!";
 
-            if (await userManager.FindByEmailAsync(adminEmail) != null) return;
+            if (await userManager.FindByEmailAsync(DataToSeed.AdminEmail) != null) return;
 
             var user = new IdentityUser
             {
-                UserName = adminEmail,
-                Email = adminEmail,
-                PhoneNumber = "0123456789",
+                UserName = DataToSeed.AdminEmail,
+                Email = DataToSeed.AdminEmail,
+                PhoneNumber = DataToSeed.AdminPhone,
                 EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(user, adminPassword);
+            var result = await userManager.CreateAsync(user, DataToSeed.AdminPassword);
 
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(user, "Admin");
+                await userManager.AddToRoleAsync(user, DataToSeed.AdminRole);
 
                 await clientsRepository.AddClientAsync(new Client
                 {
-                    FirstName = "Admin",
-                    LastName = "Admin",
-                    Email = adminEmail,
-                    Phone = "0123456789",
+                    FirstName = DataToSeed.AdminFirstName,
+                    LastName = DataToSeed.AdminLastName,
+                    Email = DataToSeed.AdminEmail,
+                    Phone = DataToSeed.AdminPhone,
                     UserId = user.Id
                 });
             }
@@ -75,12 +73,7 @@ namespace BeautyStudioSystem.Data.Seed
 
         private static async Task SeedClientsAsync(UserManager<IdentityUser> userManager, IClientsRepository clientsRepository)
         {
-            var clientsData = new List<(string FirstName, string LastName, string Email, string Phone)>
-            {
-                ("Vanya", "Petrova", "vanq.petrova@gmail.com", "0111223344"),
-                ("Anna", "Vasileva", "anna.vasileva@abv.bg", "0123455555"),
-                ("Kristina", "Hristova", "kristina.hristova@gmail.com", "0123456666")
-            };
+            var clientsData = DataToSeed.Clients;
 
             foreach (var c in clientsData)
             {
@@ -94,11 +87,11 @@ namespace BeautyStudioSystem.Data.Seed
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(user, "Client123!");
+                var result = await userManager.CreateAsync(user, DataToSeed.ClientPassword);
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "Client");
+                    await userManager.AddToRoleAsync(user, DataToSeed.ClientRole);
 
                     await clientsRepository.AddClientAsync(new Client
                     {
@@ -116,9 +109,9 @@ namespace BeautyStudioSystem.Data.Seed
         {
             var allCategories = await serviceCategoryRepository.GetAllAsync();
 
-            var hairCategory = allCategories.FirstOrDefault(c => c.Name == "Hair");
-            var nailsCategory = allCategories.FirstOrDefault(c => c.Name == "Nails");
-            var faceCategory = allCategories.FirstOrDefault(c => c.Name == "Face");
+            var hairCategory = allCategories.FirstOrDefault(c => c.Name == DataToSeed.HairCategory);
+            var nailsCategory = allCategories.FirstOrDefault(c => c.Name == DataToSeed.NailsCategory);
+            var faceCategory = allCategories.FirstOrDefault(c => c.Name == DataToSeed.FaceCategory);
 
             var employeesData = new List<(string FirstName, string LastName, string Email, string Phone, List<ServiceCategory> ServiceCategory)>
                           {
@@ -140,11 +133,11 @@ namespace BeautyStudioSystem.Data.Seed
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(user, "Employee123!");
+                var result = await userManager.CreateAsync(user, DataToSeed.EmployeePassword);
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "Employee");
+                    await userManager.AddToRoleAsync(user, DataToSeed.EmployeeRole);
 
                     await employeeRepository.AddEmployeeAsync(new Employee
                     {
@@ -161,7 +154,7 @@ namespace BeautyStudioSystem.Data.Seed
 
         private static async Task SeedServiceCategoriesAsync(IServiceCategoryRepository serviceCategoryRepository)
         {
-            var categories = new List<string> { "Hair", "Nails", "Face" };
+            var categories = DataToSeed.ServiceCategories;
 
             var existing = await serviceCategoryRepository.GetAllAsync();
 
@@ -181,12 +174,7 @@ namespace BeautyStudioSystem.Data.Seed
             var allServices = await servicesRepository.GetAllAsync();
             var allCategories = await serviceCategoryRepository.GetAllAsync();
 
-            var servicesData = new List<(string Name, decimal Price, int DurationMinutes, string CategoryName)>
-            {
-                ("Haircut & Styling", 40.00m, 60, "Hair"),
-                ("Manicure", 30.00m, 45, "Nails"),
-                ("Facial Treatment", 60.00m, 75, "Face")
-            };
+            var servicesData = DataToSeed.Services;
 
             foreach (var s in servicesData)
             {

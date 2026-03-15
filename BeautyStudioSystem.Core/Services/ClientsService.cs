@@ -1,13 +1,11 @@
-﻿using BeautyStudioSystem.Core.Services;
-using BeautyStudioSystem.Core.Services.Contracts;
+﻿using BeautyStudioSystem.Core.Services.Contracts;
 using BeautyStudioSystem.Core.ViewModels;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using BeautyStudioSystem.Data.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.RegularExpressions;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using BeautyStudioSystem.Core.Common;
 
 namespace BeautyStudioSystem.Core.Services
 
@@ -108,7 +106,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (client == null)
             {
-                throw new ArgumentException("No client found with the provided user ID.", nameof(id));
+                throw new ArgumentException(InputValidations.ClientByUserIdNotFoundMessage, nameof(id));
             }
 
             return client.Id;
@@ -192,7 +190,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (string.IsNullOrEmpty(search))
             {
-                throw new ArgumentException("Search term cannot be empty.", nameof(search));
+                throw new ArgumentException(InputValidations.EmptySearchTermMessage, nameof(search));
             }
 
 
