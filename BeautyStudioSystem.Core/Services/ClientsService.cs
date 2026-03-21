@@ -26,7 +26,7 @@ namespace BeautyStudioSystem.Core.Services
         {
             if (clientViewModel == null)
             {
-                return;
+                throw new ArgumentException(InputValidations.ClientNotFoundMessage);
             }
 
                 var firstName = clientViewModel.FullName.Split(' ')[0];
@@ -47,6 +47,11 @@ namespace BeautyStudioSystem.Core.Services
         public async Task DeleteClientAsync(int id)
         {
             var client = await _repo.GetClientByIdAsync(id);
+
+            if (client = null)
+            {
+                throw new ArgumentException(InputValidations.ClientNotFoundMessage);
+            }
 
             if (!string.IsNullOrEmpty(client.UserId))
             {
