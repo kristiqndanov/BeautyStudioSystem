@@ -113,5 +113,49 @@ namespace BeautyStudioSystem.Tests
 
             _clientsRepositoryMock.Verify(r => r.DeleteClient(clientId), Times.Once);
         }
+
+        [Test]
+        public async Task GetAllClientsAsync_ShouldReturnEmptyList_IfThereAreNoClients()
+        {
+            _clientsRepositoryMock.Setup(r => r.GetAllClientsAsync()).ReturnsAsync(new List<Client>());
+
+            var result = await _clientsService.GetAllClientsAsync();
+
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public async Task GetAllClientsAsync_ShouldReturnCorrectList_IfThereAreClients()
+        {
+            var clients = new List<Client>();
+            var client1 = new Client
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "johndoe@test.com",
+                Phone = "1234567890",
+                UserId = "user123"
+            };
+
+            var client2 = new Client
+            {
+                FirstName = "Jane",
+                LastName = "Smith",
+                Email = "janesmith@test.com",
+                Phone = "0987654321",
+                UserId = "user456"
+            };
+
+            clients.Add(client1);
+            clients.Add(client2);
+
+            _clientsRepositoryMock.Setup(r => r.GetAllClientsAsync()).ReturnsAsync(clients);
+
+            var result = await _clientsService.GetAllClientsAsync();
+
+            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual("John Doe", result.First().FullName);
+            Assert.AreEqual("Jane Smith", result.Last().FullName);
+        }
     }
 }
