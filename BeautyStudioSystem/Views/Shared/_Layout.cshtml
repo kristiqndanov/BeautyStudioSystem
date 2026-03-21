@@ -41,48 +41,60 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
                         @if (User.IsInRole("Admin"))
                         {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Clients" asp-action="Index">Clients</a>
+                                    <a class="nav-link"
+                                       asp-area="Admin"
+                                       asp-controller="Clients"
+                                       asp-action="Index">Clients</a>
                                 </li>
-
-
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Employee" asp-action="AdminIndex">Employees</a>
+                                    <a class="nav-link"
+                                       asp-area="Admin"
+                                       asp-controller="Employees"
+                                       asp-action="AdminIndex">Employees</a>
                                 </li>
-                            
                         }
 
                         @if (User.IsInRole("Client"))
                         {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Reservations" asp-action="CreateReservation">Make Reservation</a>
+                                    <a class="nav-link"
+                                       asp-area=""
+                                       asp-controller="Reservations"
+                                       asp-action="CreateReservation">Make Reservation</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Clients" asp-action="MyReservations">My Reservations</a>
+                                    <a class="nav-link"
+                                       asp-area=""
+                                       asp-controller="Clients"
+                                       asp-action="MyReservations">My Reservations</a>
                                 </li>
                         }
 
                         @if (User.IsInRole("Employee"))
                         {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Employee" asp-action="Index">My Reservations</a>
+                                    <a class="nav-link"
+                                       asp-area=""
+                                       asp-controller="Employee"
+                                       asp-action="Index">My Reservations</a>
                                 </li>
                         }
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Services" asp-action="Index">Services</a>
+                            <a class="nav-link" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Contacts">Contacts</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
                         </li>
                     </ul>
 
@@ -101,7 +113,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2026 - BeautyStudioSystem -
-            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -110,11 +122,12 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-            toastr.options = {
-                "closeButton": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "timeOut": "4000"};
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "4000"
+        };
         @await Html.PartialAsync("_Notifications")
     </script>
     @await RenderSectionAsync("Scripts", required: false)

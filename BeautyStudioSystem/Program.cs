@@ -66,7 +66,7 @@ namespace BeautyStudioSystem
             }
 
             app.UseStatusCodePagesWithReExecute("/Home/Error{0}");
-            app.UseExceptionHandler("/Home/Error500");
+            //app.UseExceptionHandler("/Home/Error500");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -75,8 +75,13 @@ namespace BeautyStudioSystem
             app.UseAuthorization();
 
             app.MapControllerRoute(
+                 name: "areas",
+                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.MapRazorPages();
 
             app.Run();

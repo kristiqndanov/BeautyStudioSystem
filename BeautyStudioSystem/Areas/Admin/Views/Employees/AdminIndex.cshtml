@@ -33,7 +33,8 @@
                                 <td>@employee.Email</td>
                                 <td>@employee.Phone</td>
                                 <td>
-                                    <a asp-controller="Employee"
+                                    <a asp-area="Admin"
+                                       asp-controller="Employees"
                                        asp-action="EmployeeReservations"
                                        asp-route-id="@employee.Id"
                                        class="text-decoration-none">See reservations</a>
