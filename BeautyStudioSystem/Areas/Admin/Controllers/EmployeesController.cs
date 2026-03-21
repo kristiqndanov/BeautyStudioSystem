@@ -91,6 +91,7 @@ namespace BeautyStudioSystem.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> EditEmployee(EmployeeViewModel employeeViewModel)
         {
             if (!ModelState.IsValid)
@@ -120,6 +121,7 @@ namespace BeautyStudioSystem.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> RevertToClient(EmployeeViewModel employeeViewModel)
         {
             var user = await _userManager.FindByIdAsync(employeeViewModel.UserId);
@@ -156,6 +158,7 @@ namespace BeautyStudioSystem.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             var employee = await _employeeRepository.GetByIdAsync(id);

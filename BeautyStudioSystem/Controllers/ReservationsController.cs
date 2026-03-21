@@ -29,6 +29,7 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> DeleteReservation(int id)
         {
 
@@ -76,7 +77,7 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpPost]
-
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> CreateReservation(CreateReservationFormModel reservationViewModel)
         {
             var services = await _servicesService.GetAllServicesAsync();
