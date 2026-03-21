@@ -281,5 +281,43 @@ namespace BeautyStudioSystem.Tests
             Assert.AreEqual(1, result.Count());
 
         }
+
+        [Test]
+        public async Task SoftDeleteClientAsync_ShouldNotDoAnything_IfClientIsNull()
+        {
+            int clientId = 1;
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync((Client)null);
+
+            await _clientsService.SoftDeleteClientAsync(clientId);
+
+            _clientsRepositoryMock.Verify(r => r.DeleteClient(It.IsAny<int>()), Times.Never);
+
+        }
+
+        [Test]
+        public async Task SoftDeleteClientAsync_ShouldDeleteClient_IfClientExists()
+        {
+            int clientId = 1;
+            var client = new Client
+            {
+                Id = clientId,
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync(client);
+
+            await _clientsService.SoftDeleteClientAsync(clientId);
+
+            _clientsRepositoryMock.Verify(r => r.DeleteClient(clientId), Times.Once);
+        }
+
+        [Test]
+        public async Task UpdateClientAsync_ShouldNotDoAnything_IfClientViewModelIsNull()
+        {
+            ClientViewModel clientViewModel = null;
+
+            await _clientsService.UpdateClientAsync(clientViewModel);
+
+            _clientsRepositoryMock.Verify(r => r.UpdateClient(It.IsAny<Client>()), Times.Never);
+        }
     }
 }
