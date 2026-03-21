@@ -197,5 +197,89 @@ namespace BeautyStudioSystem.Tests
             Assert.AreEqual(clientViewModel.UserId, result.UserId);
             Assert.AreEqual(clientViewModel.FullName, result.FullName);
         }
+
+        [Test]
+        public async Task GetClientByUserId_ShouldThrow_IfClientIsNull()
+        {
+            var userId = "user123";
+            _clientsRepositoryMock.Setup(r => r.GetClientByUserId(userId)).ReturnsAsync((Client)null);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await _clientsService.GetClientIdByUserId(userId));
+
+        }
+
+        [Test]
+        public async Task GetClientByUserId_ShouldPass_IfClientIdIsValid()
+        {
+            var userId = "user123";
+            var client = new Client
+            {
+                Id = 1,
+                UserId = userId
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByUserId(userId)).ReturnsAsync(client);
+
+            var result = await _clientsService.GetClientIdByUserId(userId);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(client.Id, result);
+        }
+
+        [Test]
+        public async Task GetClientReservations_ShouldReturnEmpty_IfClientIsNull()
+        {
+            int clientId = 1;
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync((Client)null);
+
+            var result = await _clientsService.GetClientReservations(clientId);
+
+            Assert.IsEmpty(result);
+
+        }
+
+        [Test]
+
+        public async Task GetClientReservations_ShouldReturnEmpty_IfClientHasNoReservations()
+        {
+            int clientId = 1;
+            var client = new Client
+            {
+                Id = clientId,
+                Reservations = new List<Reservation>()
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync(client);
+
+            var result = await _clientsService.GetClientReservations(clientId);
+
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public async Task GetClientReservations_ShouldReturnPopulatedList_WhenAllIsValid()
+        {
+            int clientId = 1;
+            var reservation = new Reservation
+            {
+                Id = 1,
+                Date = DateTime.Now,
+                Service = new Service { Name = "Haircut" }
+            };
+
+            var client = new Client
+            {
+                Id = clientId,
+                FirstName = "John",
+                LastName = "Doe",
+                Reservations = new List<Reservation> { reservation }
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync(client);
+
+            var result = await _clientsService.GetClientReservations(clientId);
+
+            Assert.AreEqual(1, result.Count());
+
+        }
     }
 }
