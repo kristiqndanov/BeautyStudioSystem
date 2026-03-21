@@ -157,5 +157,45 @@ namespace BeautyStudioSystem.Tests
             Assert.AreEqual("John Doe", result.First().FullName);
             Assert.AreEqual("Jane Smith", result.Last().FullName);
         }
+
+        [Test]
+        public async Task GetClientByIdAsync_ShouldThrow_IfClientIsNull()
+        {
+            int clientId = 1;
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync((Client)null);
+
+            var result = Assert.ThrowsAsync<ArgumentException>(async () => await _clientsService.GetClientByIdAsync(clientId));
+        }
+
+        [Test]
+        public async Task GetClientByIdAsync_ShouldPass_IfClientIsFound()
+        {
+            int clientId = 1;
+            var client = new Client
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "johndoe@test.com",
+                Phone = "1234567890",
+                UserId = "user123"
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync(client);
+
+            var clientViewModel = new ClientViewModel
+            {
+                Id = clientId,
+                FullName = $"{client.FirstName} {client.LastName}",
+                Email = client.Email,
+                Phone = client.Phone,
+                UserId = client.UserId
+            };
+
+            var result = await _clientsService.GetClientByIdAsync(clientId);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(clientViewModel.UserId, result.UserId);
+            Assert.AreEqual(clientViewModel.FullName, result.FullName);
+        }
     }
 }

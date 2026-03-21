@@ -90,7 +90,7 @@ namespace BeautyStudioSystem.Core.Services
 
             if (client == null)
             {
-                return null;
+                throw new ArgumentException(InputValidations.ClientNotFoundMessage);
             }
 
             var clientViewModel = new ClientViewModel
