@@ -7,9 +7,6 @@ namespace BeautyStudioSystem.Data.Infrastructure.Contracts
         public Task<IEnumerable<Client>> GetAllClientsAsync();
         public Task<Client> GetClientByIdAsync(int  id);
 
-        public Task<Client> GetClientByNameAsync(string name);
-
-        public Task<Client> GetClientByEmailAsync(string email);
         public Task AddClientAsync(Client client);
 
         public Task UpdateClient(Client client);

@@ -43,10 +43,6 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
             .ToListAsync();
         }
 
-        public async Task<Client> GetClientByEmailAsync(string email)
-        {
-            return await _dbContext.Clients.SingleOrDefaultAsync(c => c.Email == email);
-        }
 
         public async Task<Client> GetClientByIdAsync(int id)
         {
@@ -56,13 +52,6 @@ namespace BeautyStudioSystem.Data.Infrastructure.Repository
                 .SingleOrDefaultAsync(c => c.Id == id);
         }
 
-
-        public async Task<Client> GetClientByNameAsync(string name)
-        {
-            return await _dbContext.Clients
-           .SingleOrDefaultAsync(c => c.FirstName + " " + c.LastName == name);
-
-        }
 
         public async Task<Client> GetClientByUserId(string userId)
         {
