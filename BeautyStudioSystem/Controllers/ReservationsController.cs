@@ -5,20 +5,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using BeautyStudioSystem.Data.Infrastructure.Contracts;
 using BeautyStudioSystem.Common;
+using BeautyStudioSystem.Core.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace BeautyStudioSystem.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class ReservationsController : ControllerBase
     {
         private readonly IReservationsService _reservationsService;
         private readonly IServicesService _servicesService;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IClientsService _clientsService;
 
-        public ReservationsController(IReservationsService reservationsService, IServicesService servicesService, IEmployeeRepository employeeRepository)
+        public ReservationsController(IReservationsService reservationsService, IServicesService servicesService, IEmployeeRepository employeeRepository, UserManager<IdentityUser> userManager, IClientsService clientsService)
         {
             _reservationsService = reservationsService;
             _servicesService = servicesService;
             _employeeRepository = employeeRepository;
+            _userManager = userManager;
+            _clientsService = clientsService;
         }
 
         public async Task<IActionResult> Index()
@@ -29,7 +36,6 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> DeleteReservation(int id)
         {
 
@@ -40,6 +46,15 @@ namespace BeautyStudioSystem.Controllers
                 return NotFound();
             }
 
+            if (!User.IsInRole("Admin"))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var clientId = await _clientsService.GetClientIdByUserId(user.Id);
+                if (reservation.ClientId != clientId)
+                {
+                    return Forbid();
+                }
+            }
 
             await _reservationsService.DeleteReservation(id);
 
@@ -50,7 +65,7 @@ namespace BeautyStudioSystem.Controllers
                 return RedirectToAction(
                     "ClientReservations",
                     "Clients",
-                    new { id = reservation.ClientId }
+                    new { area = "Admin", id = reservation.ClientId }
                 );
             }
 
@@ -77,7 +92,6 @@ namespace BeautyStudioSystem.Controllers
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> CreateReservation(CreateReservationFormModel reservationViewModel)
         {
             var services = await _servicesService.GetAllServicesAsync();

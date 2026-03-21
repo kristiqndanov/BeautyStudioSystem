@@ -11,6 +11,7 @@ namespace BeautyStudioSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
+    [AutoValidateAntiforgeryToken]
     public class ClientsController : Controller
     {
         private readonly IClientsService _clientsService;
@@ -59,7 +60,6 @@ namespace BeautyStudioSystem.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> DeleteClient(int id)
         {
             var clientViewModel = await _clientsService.GetClientByIdAsync(id);
@@ -102,7 +102,6 @@ namespace BeautyStudioSystem.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> UpdateClient(ClientViewModel clientViewModel)
         {
             if (!ModelState.IsValid)
@@ -117,7 +116,6 @@ namespace BeautyStudioSystem.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> PromoteToEmployee(ClientViewModel clientViewModel)
         {
             var user = await _userManager.FindByIdAsync(clientViewModel.UserId);

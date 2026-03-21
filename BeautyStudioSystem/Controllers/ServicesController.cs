@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BeautyStudioSystem.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class ServicesController : ControllerBase
     {
         private readonly IServicesService _servicesService;
@@ -47,7 +48,6 @@ namespace BeautyStudioSystem.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> EditService(ServiceViewModel serviceViewModel)
         {
 
@@ -88,7 +88,6 @@ namespace BeautyStudioSystem.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AddService(ServiceViewModel serviceViewModel)
         {
             var categories = await _serviceCategoryRepository.GetAllAsync();
