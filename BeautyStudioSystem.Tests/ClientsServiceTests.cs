@@ -310,14 +310,69 @@ namespace BeautyStudioSystem.Tests
             _clientsRepositoryMock.Verify(r => r.DeleteClient(clientId), Times.Once);
         }
 
+
         [Test]
-        public async Task UpdateClientAsync_ShouldNotDoAnything_IfClientViewModelIsNull()
+        public async Task UpdateClientAsync_ShouldThrowArgumentException_IfClientViewModelIsNull()
         {
             ClientViewModel clientViewModel = null;
 
+           Assert.ThrowsAsync<ArgumentException>(async () => await _clientsService.UpdateClientAsync(clientViewModel));
+        }
+
+        [Test]
+        public async Task UpdateClientAsync_ShouldThrowArgumentException_IfClientIsNull()
+        {
+            ClientViewModel clientViewModel = new ClientViewModel
+            {
+                Id = 1,
+                FullName = "John Doe",
+                Email = "johndoe@test.com",
+                Phone = "1234567890",
+                UserId = "user123"
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientViewModel.Id)).ReturnsAsync((Client)null);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await _clientsService.UpdateClientAsync(clientViewModel));
+        }
+
+        [Test]
+        public async Task UpdateClientAsync_ShouldPass_IfAllIsValid()
+        {
+            int clientId = 1;
+            ClientViewModel clientViewModel = new ClientViewModel
+            {
+                Id = clientId,
+                FullName = "John Doe",
+                Email = "johndoe@test.com",
+                Phone = "1234567890",
+                UserId = "user123"
+            };
+
+            var client = new Client
+            {
+                Id = clientViewModel.Id,
+                FirstName = "John",
+                LastName = "Doe",
+                Email = clientViewModel.Email,
+                Phone = clientViewModel.Phone,
+                UserId = clientViewModel.UserId
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientViewModel.Id)).ReturnsAsync(client);
+
             await _clientsService.UpdateClientAsync(clientViewModel);
 
-            _clientsRepositoryMock.Verify(r => r.UpdateClient(It.IsAny<Client>()), Times.Never);
+            _clientsRepositoryMock.Verify(r => r.UpdateClient(It.Is<Client>(c =>
+                c.Id == clientViewModel.Id &&
+                c.FirstName == "John" &&
+                c.LastName == "Doe" &&
+                c.Email == clientViewModel.Email &&
+                c.Phone == clientViewModel.Phone &&
+                c.UserId == clientViewModel.UserId
+            )), Times.Once);
+
         }
+
     }
 }

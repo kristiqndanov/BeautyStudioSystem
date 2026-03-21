@@ -191,10 +191,18 @@ namespace BeautyStudioSystem.Core.Services
 
         public async Task UpdateClientAsync(ClientViewModel clientViewModel)
         {
+            if (clientViewModel == null)
+            {
+                throw new ArgumentException(InputValidations.ClientNotFoundMessage);
+            }
+
             var client = await _repo.GetClientByIdAsync(clientViewModel.Id);
 
-            if (client != null)
+            if (client == null)
             {
+                throw new ArgumentException(InputValidations.ClientNotFoundMessage);
+            }
+
                 var names = clientViewModel.FullName.Split(' ', 2);
 
                 client.FirstName = names[0];
@@ -203,7 +211,7 @@ namespace BeautyStudioSystem.Core.Services
                 client.Email = clientViewModel.Email;
 
                 await _repo.UpdateClient(client);
-            }
+            
         }
 
     }
