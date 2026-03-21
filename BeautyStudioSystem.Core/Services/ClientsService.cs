@@ -180,45 +180,6 @@ namespace BeautyStudioSystem.Core.Services
             };
         }
 
-        public async Task<IEnumerable<ClientViewModel>> SearchClientsAsync(string search)
-        {
-            var clients = await _repo.GetAllClientsAsync();
-            var regex = new Regex("@[^@\\s]+\\.[^@\\s]+");
-
-            var clientsViewModels = clients.Select(c => new ClientViewModel
-            {
-                Id = c.Id,
-                FullName = $"{c.FirstName} {c.LastName}",
-                Email = c.Email,
-                Phone = c.Phone,
-            }).ToList();
-
-            if (string.IsNullOrEmpty(search))
-            {
-                throw new ArgumentException(InputValidations.EmptySearchTermMessage, nameof(search));
-            }
-
-
-                if (regex.IsMatch(search))
-                {
-                    clientsViewModels = clientsViewModels
-                    .Where(c => c.Email.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    return clientsViewModels;
-                }
-
-                else
-                {
-                    clientsViewModels = clientsViewModels
-                    .Where(c => c.FullName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    return clientsViewModels;
-
-                }
-
-            
-        }
-
         public async Task SoftDeleteClientAsync(int id)
         {
             var client = await _repo.GetClientByIdAsync(id);

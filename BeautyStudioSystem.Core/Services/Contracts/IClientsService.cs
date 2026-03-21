@@ -8,8 +8,6 @@ namespace BeautyStudioSystem.Core.Services.Contracts
 
         public Task<IEnumerable<ReservationViewModel>> GetClientReservations(int id);
 
-        public Task<IEnumerable<ClientViewModel>> SearchClientsAsync(string search);
-
         public Task DeleteClientAsync(int id);
 
         public Task UpdateClientAsync(ClientViewModel clientViewModel);
