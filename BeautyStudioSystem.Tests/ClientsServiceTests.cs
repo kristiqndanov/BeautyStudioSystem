@@ -61,7 +61,7 @@ namespace BeautyStudioSystem.Tests
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "test@test.com",
-                Phone= "1234567890",
+                Phone = "1234567890",
                 UserId = "user123",
             };
 
@@ -70,7 +70,48 @@ namespace BeautyStudioSystem.Tests
             _clientsRepositoryMock.Verify(r => r.AddClientAsync(It.IsAny<Data.Models.Client>()), Times.Once);
         }
 
-        
+        [Test]
+        public async Task DeleteClientAsync_ShouldThrowArgumentException_IfClientNotFound()
+        {
+            int clientId = 1;
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync((Client)null);
 
+            var result = Assert.ThrowsAsync<ArgumentException>(async () => await _clientsService.DeleteClientAsync(clientId));
+        }
+
+        [Test]
+        public async Task DeleteClientAsync_ShouldDeleteUser_IfUserIdIsNotNull()
+        {
+            int clientId = 1;
+            var client = new Client
+            {
+                Id = clientId,
+                UserId = "user123"
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync(client);
+            _userManagerMock.Setup(u => u.FindByIdAsync(client.UserId)).ReturnsAsync(new IdentityUser { Id = client.UserId });
+
+            await _clientsService.DeleteClientAsync(clientId);
+
+            _userManagerMock.Verify(u => u.DeleteAsync(It.IsAny<IdentityUser>()), Times.Once);
+        }
+
+        [Test]
+        public async Task DeleteClientAsync_ShouldDeleteClient_IfClientExists()
+        {
+            int clientId = 1;
+            var client = new Client
+            {
+                Id = clientId,
+                UserId = "user123"
+            };
+
+            _clientsRepositoryMock.Setup(r => r.GetClientByIdAsync(clientId)).ReturnsAsync(client);
+
+            await _clientsService.DeleteClientAsync(clientId);
+
+            _clientsRepositoryMock.Verify(r => r.DeleteClient(clientId), Times.Once);
+        }
     }
 }

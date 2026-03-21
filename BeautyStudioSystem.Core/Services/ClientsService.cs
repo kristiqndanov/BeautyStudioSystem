@@ -48,7 +48,7 @@ namespace BeautyStudioSystem.Core.Services
         {
             var client = await _repo.GetClientByIdAsync(id);
 
-            if (client = null)
+            if (client == null)
             {
                 throw new ArgumentException(InputValidations.ClientNotFoundMessage);
             }
