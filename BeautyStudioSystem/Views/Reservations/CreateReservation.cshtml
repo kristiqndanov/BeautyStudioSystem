@@ -1,60 +1,71 @@
 ﻿@model BeautyStudioSystem.Core.ViewModels.CreateReservationFormModel
 @{
-    ViewData["Title"] = "Create Reservation";
+    ViewData["Title"] = "Book a Service";
 }
-<div asp-validation-summary="All" class="text-danger"></div>
-<h2 class="mb-4">Book a Service</h2>
-<form asp-action="CreateReservation" method="post" class="row g-3">
 
-    <!-- Service Dropdown -->
-    <div class="col-md-6">
-        <label asp-for="ServiceId" class="form-label">Service</label>
-        <select id="serviceDropdown"
-                asp-for="ServiceId"
-                class="form-select">
-            <option value="">-- Select a service --</option>
-            @foreach (var service in ViewBag.Services)
-            {
-                    <option value="@service.Value"
-                            data-category-id="@ViewBag.ServiceCategories[service.Value]">
-                    @service.Text
-                    </option>
-            }
-        </select>
-        <span asp-validation-for="ServiceId" class="text-danger"></span>
-    </div>
+<!-- Page Header -->
+<div class="services-header text-center py-6">
+    <p class="section-label">Make an Appointment</p>
+    <h1 class="section-title">Book a Service</h1>
+    <div class="section-divider"></div>
+</div>
 
-    <!-- Employee Dropdown -->
-    <div class="col-md-6">
-        <label asp-for="EmployeeId" class="form-label">Employee</label>
-        <select id="employeeDropdown"
-                asp-for="EmployeeId"
-                class="form-select"
-                disabled>
-            <option value="">-- Select a service first --</option>
-        </select>
-        <span asp-validation-for="EmployeeId" class="text-danger"></span>
-    </div>
+<div class="container py-6">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="booking-card">
+                <div asp-validation-summary="All" class="text-danger mb-4"></div>
+                <form asp-action="CreateReservation" method="post">
 
-    <!-- Date -->
-    <div class="col-md-6">
-        <label asp-for="Date" class="form-label">Date</label>
-        <input asp-for="Date" type="date" class="form-control" />
-        <span asp-validation-for="Date" class="text-danger"></span>
-    </div>
+                    <div class="mb-4">
+                        <label asp-for="ServiceId" class="form-label">Service</label>
+                        <select id="serviceDropdown"
+                                asp-for="ServiceId"
+                                class="form-select">
+                            <option value="">— Select a service —</option>
+                            @foreach (var service in ViewBag.Services)
+                            {
+                                    <option value="@service.Value"
+                                            data-category-id="@ViewBag.ServiceCategories[service.Value]">
+                                    @service.Text
+                                    </option>
+                            }
+                        </select>
+                        <span asp-validation-for="ServiceId" class="text-danger"></span>
+                    </div>
 
-    <!-- Start Time -->
-    <div class="col-md-6">
-        <label asp-for="StartTime" class="form-label">Start Time</label>
-        <input asp-for="StartTime" type="time" class="form-control" />
-        <span asp-validation-for="StartTime" class="text-danger"></span>
-    </div>
+                    <div class="mb-4">
+                        <label asp-for="EmployeeId" class="form-label">Specialist</label>
+                        <select id="employeeDropdown"
+                                asp-for="EmployeeId"
+                                class="form-select"
+                                disabled>
+                            <option value="">— Select a service first —</option>
+                        </select>
+                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                    </div>
 
-    <!-- Submit -->
-    <div class="col-12 mt-3">
-        <button type="submit" class="btn btn-primary">Book Reservation</button>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Date" class="form-label">Date</label>
+                            <input asp-for="Date" type="date" class="form-control" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="StartTime" class="form-label">Start Time</label>
+                            <input asp-for="StartTime" type="time" class="form-control" />
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-gold w-100 py-3">
+                        Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-</form>
+</div>
 
 @section Scripts {
         <partial name="_ValidationScriptsPartial" />
@@ -63,37 +74,31 @@
                 const selectedOption = this.options[this.selectedIndex];
                 const categoryId = selectedOption.getAttribute('data-category-id');
                 const employeeDropdown = document.getElementById('employeeDropdown');
-
-                employeeDropdown.innerHTML = '<option value="">-- Loading... --</option>';
+                employeeDropdown.innerHTML = '<option value="">— Loading... —</option>';
                 employeeDropdown.disabled = true;
-
                 if (!categoryId) {
-                    employeeDropdown.innerHTML = '<option value="">-- Select a service first --</option>';
+                    employeeDropdown.innerHTML = '<option value="">— Select a service first —</option>';
                     return;
                 }
-
-                        fetch(`/Reservations/GetEmployeesByServiceCategory?categoryId=${categoryId}`)
-        .then(response => response.json())
-        .then(employees => {
-            employeeDropdown.innerHTML = '<option value="">-- Select an employee --</option>';
-
-            if (employees.length === 0) {
-                employeeDropdown.innerHTML = '<option value="">-- No employees available --</option>';
-                return;
-            }
-
-            employees.forEach(emp => {
-                const option = document.createElement('option');
-                option.value = emp.id;
-                option.textContent = emp.name;
-                employeeDropdown.appendChild(option);
-            });
-
-            employeeDropdown.disabled = false;
-        })
-        .catch(() => {
-            employeeDropdown.innerHTML = '<option value="">-- Error loading employees --</option>';
-        });
+                fetch(`/Reservations/GetEmployeesByServiceCategory?categoryId=${categoryId}`)
+                    .then(response => response.json())
+                    .then(employees => {
+                        employeeDropdown.innerHTML = '<option value="">— Select a specialist —</option>';
+                        if (employees.length === 0) {
+                            employeeDropdown.innerHTML = '<option value="">— No specialists available —</option>';
+                            return;
+                        }
+                        employees.forEach(emp => {
+                            const option = document.createElement('option');
+                            option.value = emp.id;
+                            option.textContent = emp.name;
+                            employeeDropdown.appendChild(option);
+                        });
+                        employeeDropdown.disabled = false;
+                    })
+                    .catch(() => {
+                        employeeDropdown.innerHTML = '<option value="">— Error loading specialists —</option>';
+                    });
             });
         </script>
 }

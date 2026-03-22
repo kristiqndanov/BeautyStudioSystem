@@ -12,93 +12,72 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light custom-navbar border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom-navbar sticky-top">
+            <div class="container">
 
-                <!-- Logo + Text -->
-                <a class="navbar-brand d-flex align-items-center"
+                <!-- Logo + Brand -->
+                <a class="navbar-brand d-flex align-items-center gap-2"
                    asp-area=""
                    asp-controller="Home"
                    asp-action="Index">
-                    <img src="~/images/logo.png"
-                         width="32"
-                         height="32"
-                         class="me-2 rounded-circle" />
-                    <span>BeautyStudioSystem</span>
+                    <img src="~/images/logo.png" width="38" height="38" class="rounded-circle" />
+                    <span class="brand-name">BeautyStudio</span>
                 </a>
 
                 <!-- Mobile toggle -->
                 <button class="navbar-toggler" type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
+                        data-bs-target="#navbarMain"
+                        aria-controls="navbarMain"
                         aria-expanded="false"
                         aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- Menu -->
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav mx-auto gap-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
                         </li>
 
                         @if (User.IsInRole("Admin"))
                         {
                                 <li class="nav-item">
-                                    <a class="nav-link"
-                                       asp-area="Admin"
-                                       asp-controller="Clients"
-                                       asp-action="Index">Clients</a>
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Clients" asp-action="Index">Clients</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link"
-                                       asp-area="Admin"
-                                       asp-controller="Employees"
-                                       asp-action="AdminIndex">Employees</a>
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Employees" asp-action="AdminIndex">Employees</a>
                                 </li>
                         }
 
                         @if (User.IsInRole("Client"))
                         {
                                 <li class="nav-item">
-                                    <a class="nav-link"
-                                       asp-area=""
-                                       asp-controller="Reservations"
-                                       asp-action="CreateReservation">Make Reservation</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Reservations" asp-action="CreateReservation">Book Now</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link"
-                                       asp-area=""
-                                       asp-controller="Clients"
-                                       asp-action="MyReservations">My Reservations</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Clients" asp-action="MyReservations">My Reservations</a>
                                 </li>
                         }
 
                         @if (User.IsInRole("Employee"))
                         {
                                 <li class="nav-item">
-                                    <a class="nav-link"
-                                       asp-area=""
-                                       asp-controller="Employee"
-                                       asp-action="Index">My Reservations</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="Index">My Schedule</a>
                                 </li>
                         }
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
-                        </li>
                     </ul>
 
-                    <partial name="_LoginPartial" />
+                    <div class="d-flex align-items-center">
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>

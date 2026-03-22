@@ -3,132 +3,176 @@
 }
 
 <!-- Hero Section -->
-<div class="container-fluid p-0">
-    <div class="bg-dark text-white text-center d-flex align-items-center justify-content-center"
-         style="height: 70vh; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/hero.jpg') center/cover no-repeat;">
-        <div>
-            <h1 class="display-4 fw-bold">Feel Beautiful. Feel Confident.</h1>
-            <p class="lead">
-                Professional beauty treatments in a relaxing and welcoming atmosphere.
-            </p>
-            <a asp-controller="Services" asp-action="Index" class="btn btn-success btn-lg mt-3">
-                View Services
-            </a>
+<div class="hero-section">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <p class="hero-tagline">Welcome to BeautyStudio</p>
+            <h1 class="hero-title">Feel Beautiful.<br />Feel Confident.</h1>
+            <p class="hero-subtitle">Professional beauty treatments in a relaxing and welcoming atmosphere.</p>
+            <div class="hero-buttons">
+                <a asp-controller="Services" asp-action="Index" class="btn btn-gold btn-lg">Explore Services</a>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-light btn-lg ms-3">Book Now</a>
+                }
+                else if (User.IsInRole("Client"))
+                {
+                        <a asp-controller="Reservations" asp-action="CreateReservation" class="btn btn-outline-light btn-lg ms-3">Book Now</a>
+                }
+            </div>
         </div>
     </div>
 </div>
 
-<!-- About Section -->
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2>Where Beauty Meets Care</h2>
-        <p class="text-muted">
-            At our studio, beauty is more than appearance—it’s confidence and comfort.
-        </p>
+<!-- Features Section -->
+<div class="container py-6">
+    <div class="section-header text-center">
+        <p class="section-label">Why Choose Us</p>
+        <h2 class="section-title">Where Beauty Meets Care</h2>
+        <div class="section-divider"></div>
     </div>
 
-    <div class="row text-center">
+    <div class="row text-center mt-5 g-4">
         <div class="col-md-3">
-            <h5>Professional Staff</h5>
-            <p class="text-muted">Experienced and friendly specialists.</p>
+            <div class="feature-card">
+                <div class="feature-icon">✦</div>
+                <h5 class="feature-title">Professional Staff</h5>
+                <p class="feature-text">Experienced and friendly specialists dedicated to your look.</p>
+            </div>
         </div>
         <div class="col-md-3">
-            <h5>Clean Environment</h5>
-            <p class="text-muted">Hygienic and relaxing atmosphere.</p>
+            <div class="feature-card">
+                <div class="feature-icon">✦</div>
+                <h5 class="feature-title">Clean Environment</h5>
+                <p class="feature-text">A hygienic and calming atmosphere for your comfort.</p>
+            </div>
         </div>
         <div class="col-md-3">
-            <h5>Quality Products</h5>
-            <p class="text-muted">Only trusted professional brands.</p>
+            <div class="feature-card">
+                <div class="feature-icon">✦</div>
+                <h5 class="feature-title">Quality Products</h5>
+                <p class="feature-text">Only trusted professional brands used in every treatment.</p>
+            </div>
         </div>
         <div class="col-md-3">
-            <h5>Personal Care</h5>
-            <p class="text-muted">Treatments tailored to you.</p>
+            <div class="feature-card">
+                <div class="feature-icon">✦</div>
+                <h5 class="feature-title">Personal Care</h5>
+                <p class="feature-text">Every treatment is tailored specifically to you.</p>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Services Section -->
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2>Our Main Services</h2>
-    </div>
+<div class="services-section py-6">
+    <div class="container">
+        <div class="section-header text-center">
+            <p class="section-label">What We Offer</p>
+            <h2 class="section-title">Our Main Services</h2>
+            <div class="section-divider"></div>
+        </div>
 
-    <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <img src="/images/services/1.png" class="card-img-top" style="height:250px; object-fit:cover;">
-                <div class="card-body">
-                    <h5 class="card-title">Haircut & Styling</h5>
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-img-wrapper">
+                        <img src="/images/services/1.png" alt="Haircut & Styling" />
+                        <div class="service-overlay">
+                            <a asp-controller="Services" asp-action="Index" class="btn btn-gold-sm">View</a>
+                        </div>
+                    </div>
+                    <div class="service-card-body">
+                        <h5>Haircut & Styling</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-img-wrapper">
+                        <img src="/images/services/2.png" alt="Manicure" />
+                        <div class="service-overlay">
+                            <a asp-controller="Services" asp-action="Index" class="btn btn-gold-sm">View</a>
+                        </div>
+                    </div>
+                    <div class="service-card-body">
+                        <h5>Manicure</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-img-wrapper">
+                        <img src="/images/services/3.png" alt="Facial Treatment" />
+                        <div class="service-overlay">
+                            <a asp-controller="Services" asp-action="Index" class="btn btn-gold-sm">View</a>
+                        </div>
+                    </div>
+                    <div class="service-card-body">
+                        <h5>Facial Treatment</h5>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <img src="/images/services/2.png" class="card-img-top" style="height:250px; object-fit:cover;">
-                <div class="card-body">
-                    <h5 class="card-title">Manicure</h5>
-                </div>
-            </div>
+        <div class="text-center mt-5">
+            <a asp-controller="Services" asp-action="Index" class="btn btn-outline-dark px-5">See All Services</a>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <img src="/images/services/3.png" class="card-img-top" style="height:250px; object-fit:cover;">
-                <div class="card-body">
-                    <h5 class="card-title">Facial Treatment</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="text-center">
-        <a asp-controller="Services" asp-action="Index" class="btn btn-outline-success">
-            See All Services
-        </a>
     </div>
 </div>
 
-<!-- Special Offer Section -->
-<div class="container-fluid bg-success text-white text-center py-5 mt-5">
-    <h2>New Client?</h2>
-    <p class="lead">Enjoy 10% off your first visit!</p>
-    <a asp-controller="Services" asp-action="Index" class="btn btn-light btn-lg">
-        Book Now
-    </a>
+<!-- Offer Banner -->
+<div class="offer-banner py-6">
+    <div class="container text-center">
+        <p class="section-label text-white-50">Limited Time</p>
+        <h2 class="offer-title">New Client Special</h2>
+        <p class="offer-subtitle">Enjoy 10% off your very first visit with us.</p>
+        <a asp-controller="Services" asp-action="Index" class="btn btn-gold btn-lg mt-3">Book Your Visit</a>
+    </div>
 </div>
 
 <!-- Testimonials -->
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2>What Our Clients Say</h2>
+<div class="container py-6">
+    <div class="section-header text-center">
+        <p class="section-label">Our Clients</p>
+        <h2 class="section-title">What They Say</h2>
+        <div class="section-divider"></div>
     </div>
 
-    <div class="row text-center">
-        <div class="col-md-6 mb-3">
-            <div class="card shadow p-4">
-                <p class="mb-1">⭐⭐⭐⭐⭐</p>
-                <p>“Very professional and friendly staff. I always leave feeling beautiful!”</p>
-                <small class="text-muted">— Maria P.</small>
+    <div class="row mt-5 g-4">
+        <div class="col-md-6">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"Very professional and friendly staff. I always leave feeling beautiful!"</p>
+                <p class="testimonial-author">— Maria P.</p>
             </div>
         </div>
-
-        <div class="col-md-6 mb-3">
-            <div class="card shadow p-4">
-                <p class="mb-1">⭐⭐⭐⭐⭐</p>
-                <p>“The best manicure I’ve had. Clean, relaxing, and perfect results.”</p>
-                <small class="text-muted">— Elena G.</small>
+        <div class="col-md-6">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">"The best manicure I've had. Clean, relaxing, and perfect results."</p>
+                <p class="testimonial-author">— Elena G.</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Contact Section -->
-<div class="container-fluid bg-light mt-5 py-4">
-    <div class="container text-center">
-        <h4>Contact Us</h4>
-        <p class="mb-1">📍 Your Studio Address</p>
-        <p class="mb-1">📞 +359 88 123 4567</p>
-        <p>🕒 Mon–Sat: 9:00 – 19:00</p>
+<!-- Contact Strip -->
+<div class="contact-strip py-5">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <p class="contact-icon">📍</p>
+                <p class="contact-text">Your Studio Address</p>
+            </div>
+            <div class="col-md-4">
+                <p class="contact-icon">📞</p>
+                <p class="contact-text">+359 88 123 4567</p>
+            </div>
+            <div class="col-md-4">
+                <p class="contact-icon">🕒</p>
+                <p class="contact-text">Mon–Sat: 9:00 – 19:00</p>
+            </div>
+        </div>
     </div>
 </div>
