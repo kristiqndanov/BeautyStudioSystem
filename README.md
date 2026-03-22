@@ -14,7 +14,7 @@ A web application for beauty studios and salons to manage reservations, employee
 - [Seeded Data](#seeded-data)
 - [Setup Instructions](#setup-instructions)
 - [Test Coverage](#test-coverage)
-- [Deployment](#deployment)
+- [AI Assistance](#ai-assistance)
 - [Screenshots](#screenshots)
 
 ---
